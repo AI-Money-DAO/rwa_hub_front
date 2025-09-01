@@ -1,0 +1,4492 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>OpenAPI definition</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/ant-design-vue@1.4.10/dist/antd.min.css"
+    />
+    <style>
+      .content-line {
+        height: 25px;
+        line-height: 25px;
+      }
+
+      .content-line-count {
+        height: 35px;
+        line-height: 35px;
+      }
+
+      .title {
+        margin-top: 25px;
+      }
+
+      .knife4j-description {
+        /*  width: 90%;
+  margin: 15px auto; */
+        margin-top: 5px;
+      }
+
+      .divider {
+        margin: 4px 0;
+      }
+
+      .divider-count {
+        margin: 8px 0;
+      }
+
+      .knife4j-document {
+        margin-top: 30px;
+      }
+
+      .api-tab {
+        margin-top: 15px;
+
+        .ant-tag {
+          height: 32px;
+          line-height: 32px;
+        }
+      }
+
+      .knife4j-menu-api-deprecated {
+        text-decoration: line-through;
+      }
+
+      .knife4j-api-title {
+        margin-top: 10px;
+        margin-bottom: 5px;
+        font-size: 16px;
+        font-weight: 600;
+        color: #616368;
+        height: 35px;
+        line-height: 35px;
+      }
+
+      .knife4j-api-row {
+        height: 45px;
+        line-height: 45px;
+      }
+
+      .knife4j-api-summary {
+        border-color: #49cc90;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        padding: 2px;
+        cursor: pointer;
+      }
+
+      .knife4j-api-summary-method {
+        font-size: 14px;
+        font-weight: 700;
+        min-width: 80px;
+        padding: 6px 15px;
+        text-align: center;
+        border-radius: 3px;
+        text-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+        font-family:
+          Titillium Web,
+          sans-serif;
+        color: #fff;
+      }
+
+      .knife4j-api-summary-path {
+        font-size: 14px;
+        display: flex;
+        -webkit-box-flex: 0;
+        -ms-flex: 0 3 auto;
+        flex: 0 3 auto;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        word-break: break-all;
+        padding: 0 32px;
+      }
+
+      .knife4j-api-post {
+        border-color: #49cc90;
+        background: rgba(73, 204, 144, 0.1);
+      }
+
+      .knife4j-api-post .knife4j-api-summary-method {
+        background: #49cc90;
+      }
+
+      .knife4j-api-get {
+        border-color: #61affe;
+        background: rgba(97, 175, 254, 0.1);
+      }
+
+      .knife4j-api-get .knife4j-api-summary-method {
+        background: #61affe;
+      }
+
+      .knife4j-api-head {
+        border-color: #9012fe;
+        background: rgba(144, 18, 254, 0.1);
+      }
+
+      .knife4j-api-head .knife4j-api-summary-method {
+        background: #9012fe;
+      }
+
+      .knife4j-api-put {
+        border-color: #fca130;
+        background: rgba(252, 161, 48, 0.1);
+      }
+
+      .knife4j-api-put .knife4j-api-summary-method {
+        background: #fca130;
+      }
+
+      .knife4j-api-delete {
+        border-color: #f93e3e;
+        background: rgba(249, 62, 62, 0.1);
+      }
+
+      .knife4j-api-delete .knife4j-api-summary-method {
+        background: #f93e3e;
+      }
+
+      .knife4j-api-options {
+        border-color: #0d5aa7;
+        background: rgba(13, 90, 167, 0.1);
+      }
+
+      .knife4j-api-options .knife4j-api-summary-method {
+        background: #0d5aa7;
+      }
+
+      .knife4j-api-patch {
+        border-color: #50e3c2;
+        background: rgba(80, 227, 194, 0.1);
+      }
+
+      .knife4j-api-patch .knife4j-api-summary-method {
+        background: #50e3c2;
+      }
+
+      #knife4jDoc ul {
+        padding-left: 10px;
+        list-style: none;
+        counter-reset: ordered;
+      }
+
+      #knife4jDoc ul li:before {
+        counter-increment: ordered;
+        content: counters(ordered, '.') ' ';
+        color: #1890ff;
+      }
+
+      .api-basic {
+        padding: 11px;
+      }
+
+      .api-basic-title {
+        font-size: 14px;
+        font-weight: 700;
+      }
+
+      .api-basic-body {
+        font-size: 14px;
+        font-family: -webkit-body;
+      }
+
+      .knife4j-api-editor-show {
+        margin: 15px 0;
+        font:
+          100 12px/18px monaco,
+          andale mono,
+          courier new;
+        padding: 10px 12px;
+        border: #ccc 1px solid;
+        border-left-width: 4px;
+        background-color: #fefefe;
+        box-shadow: 0 0 4px #eee;
+        word-break: break-all;
+        word-wrap: break-word;
+        color: #444;
+      }
+
+      .knife4j-api-editor-show .string {
+        color: green;
+      }
+
+      /*字符串的样式*/
+      .knife4j-api-editor-show .number {
+        color: darkorange;
+      }
+
+      /*数字的样式*/
+      .knife4j-api-editor-show .boolean {
+        color: blue;
+      }
+
+      /*布尔型数据的样式*/
+      .knife4j-api-editor-show .null {
+        color: magenta;
+      }
+
+      /*null值的样式*/
+      .knife4j-api-editor-show .key {
+        color: red;
+      }
+
+      /*key值的样式*/
+      .api-description {
+        border-left: 4px solid #ddd;
+        line-height: 30px;
+      }
+
+      .api-body-desc {
+        padding: 10px;
+        min-height: 35px;
+        box-sizing: border-box;
+        border: 1px solid #e8e8e8;
+      }
+
+      .ant-card-body {
+        padding: 5px;
+      }
+
+      .api-title {
+        margin-top: 10px;
+        margin-bottom: 5px;
+        font-size: 16px;
+        font-weight: 600;
+        height: 30px;
+        line-height: 30px;
+        border-left: 4px solid #00ab6d;
+        text-indent: 8px;
+      }
+
+      .content-line {
+        height: 25px;
+        line-height: 25px;
+      }
+
+      .content-line-count {
+        height: 35px;
+        line-height: 35px;
+      }
+
+      .divider {
+        margin: 4px 0;
+      }
+
+      .knife4j-doc-m {
+        position: fixed;
+        height: 500px;
+        width: 400px;
+        border: 1px solid #b7b4b4;
+        overflow-y: auto;
+        right: 12px;
+        top: 40px;
+        z-index: 9999;
+        background: #fcfafa;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div
+      id="knife4jDocument"
+      class="resume_preview_page"
+      style="margin: 10px auto; width: 88%"
+    >
+      <div class="htmledit_views">
+        <a-row>
+          <!--基础信息-->
+          <a-row>
+            <a-col :span="24">
+              <div class="title">
+                <h2>{{instance.title}}</h2>
+              </div>
+              <div class="knife4j-description">
+                <a-row class="content-line">
+                  <a-col :span="5">
+                    <h3>简介</h3>
+                  </a-col>
+                  <a-col :span="19"
+                    ><span v-html="instance.description"
+                  /></a-col>
+                </a-row>
+                <a-divider class="divider" />
+              </div>
+              <div class="knife4j-description">
+                <a-row class="content-line">
+                  <a-col :span="5">
+                    <h3>作者</h3>
+                  </a-col>
+                  <a-col :span="19"><span v-html="instance.contact" /></a-col>
+                </a-row>
+                <a-divider class="divider" />
+              </div>
+              <div class="knife4j-description">
+                <a-row class="content-line">
+                  <a-col :span="5">
+                    <h3>版本</h3>
+                  </a-col>
+                  <a-col :span="19"><span v-html="instance.version" /></a-col>
+                </a-row>
+                <a-divider class="divider" />
+              </div>
+              <div class="knife4j-description">
+                <a-row class="content-line">
+                  <a-col :span="5">
+                    <h3>host</h3>
+                  </a-col>
+                  <a-col :span="19"><span v-html="instance.host" /></a-col>
+                </a-row>
+                <a-divider class="divider" />
+              </div>
+              <div class="knife4j-description">
+                <a-row class="content-line">
+                  <a-col :span="5">
+                    <h3>basePath</h3>
+                  </a-col>
+                  <a-col :span="19"><span v-html="instance.basePath" /></a-col>
+                </a-row>
+                <a-divider class="divider" />
+              </div>
+              <div class="knife4j-description">
+                <a-row class="content-line">
+                  <a-col :span="5">
+                    <h3>服务Url</h3>
+                  </a-col>
+                  <a-col :span="19"
+                    ><span v-html="instance.termsOfService"
+                  /></a-col>
+                </a-row>
+                <a-divider class="divider" />
+              </div>
+              <div class="knife4j-description">
+                <a-row class="content-line">
+                  <a-col :span="5">
+                    <h3>分组名称</h3>
+                  </a-col>
+                  <a-col :span="19"><span v-html="instance.name" /></a-col>
+                </a-row>
+                <a-divider class="divider" />
+              </div>
+              <div class="knife4j-description">
+                <a-row class="content-line">
+                  <a-col :span="5">
+                    <h3>分组url</h3>
+                  </a-col>
+                  <a-col :span="19"><span v-html="instance.url" /></a-col>
+                </a-row>
+                <a-divider class="divider" />
+              </div>
+              <div class="description">
+                <a-row class="content-line">
+                  <a-col :span="5">
+                    <h3>分组location</h3>
+                  </a-col>
+                  <a-col :span="19"><span v-html="instance.location" /></a-col>
+                </a-row>
+                <a-divider class="divider" />
+              </div>
+              <div class="knife4j-description">
+                <a-row class="content-line">
+                  <a-col :span="5">
+                    <h3>接口统计信息</h3>
+                  </a-col>
+                  <a-col :span="19">
+                    <a-row
+                      class="content-line-count"
+                      v-for="param in instance.pathArrs"
+                      :key="param.method"
+                    >
+                      <a-col :span="3"> {{param.method}} </a-col>
+                      <a-col :span="2">
+                        <a-tag color="#108ee9">{{param.count}}</a-tag>
+                      </a-col>
+                      <a-divider class="divider-count" />
+                    </a-row>
+                  </a-col>
+                </a-row>
+              </div>
+            </a-col>
+          </a-row>
+
+          <!--目录-->
+          <a-row id="knife4j-doc-m" class="knife4j-doc-m">
+            <a-row
+              style="
+                float: right;
+                width: 57px;
+                z-index: 10000;
+                overflow: hidden;
+              "
+            >
+              <a-button type="link" id="btnHide">隐藏</a-button>
+            </a-row>
+            <a-row v-if="hideShow" id="knife4jDoc">
+              <ul>
+                <li><a href="#knife4jDocument">主页</a></li>
+                <li v-for="tag in tags" :key="tag.name">
+                  <a :href="'#'+tag.name">{{tag.name}}</a>
+                  <ul>
+                    <li v-for="c in tag.childrens" :key="c.id">
+                      <a :href="'#'+c.operationId">{{c.summary}}</a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </a-row>
+          </a-row>
+          <!--分组API信息-->
+          <!--遍历tags-->
+          <a-row v-for="tag in tags" :key="tag.name">
+            <h1 :id="tag.name">{{tag.name}}</h1>
+            <div class="knife4j-document" v-for="api in tag.childrens">
+              <!--接口基本信息-->
+              <a-row>
+                <a-row :id="api.operationId" class="knife4j-api-title">
+                  <span
+                    v-if="api.deprecated"
+                    class="knife4j-menu-api-deprecated"
+                  >
+                    {{ api.summary }}
+                  </span>
+                  <span v-else> {{ api.summary }} </span>
+                </a-row>
+                <a-row :class="'knife4j-api-' + api.methodType.toLowerCase()">
+                  <div class="knife4j-api-summary">
+                    <span class="knife4j-api-summary-method"
+                      >{{ api.methodType }}</span
+                    >
+                    <span class="knife4j-api-summary-path"
+                      >{{ api.showUrl }}</span
+                    >
+                  </div>
+                </a-row>
+                <a-row class="knife4j-api-row">
+                  <a-col :span="12">
+                    <a-row>
+                      <a-col class="api-basic-title" :span="6"
+                        >请求数据类型</a-col
+                      >
+                      {{ api.consumes }}
+                    </a-row>
+                  </a-col>
+                  <a-col :span="12">
+                    <a-row>
+                      <a-col class="api-basic-title" :span="6"
+                        >响应数据类型</a-col
+                      >
+                      {{ api.produces }}
+                    </a-row>
+                  </a-col>
+                </a-row>
+              </a-row>
+              <div v-if="api.author">
+                <div class="api-title">开发者</div>
+                <div
+                  v-if="api.author"
+                  v-html="api.author"
+                  class="api-body-desc"
+                ></div>
+              </div>
+              <!--接口描述-->
+              <div v-if="api.description">
+                <div class="api-title">接口描述</div>
+                <div
+                  v-if="api.description"
+                  v-html="api.description"
+                  class="api-body-desc"
+                ></div>
+              </div>
+              <!--请求示例-->
+              <div v-if="api.requestValue">
+                <div class="api-title">请求示例</div>
+                <pre
+                  class="knife4j-api-editor-show"
+                  v-html="formaterJson(api.requestValue)"
+                ></pre>
+              </div>
+              <div class="api-title">请求参数</div>
+              <a-table
+                default-expand-all-rows
+                :columns="columns"
+                :data-source="api.reqParameters"
+                :row-key="genUnionTableKey"
+                size="small"
+                :pagination="page"
+              >
+                <template slot="requireTemplate" slot-scope="text">
+                  <span v-if="text" style="color: red"
+                    >{{ text.toLocaleString() }}</span
+                  >
+                  <span v-else>{{ text.toLocaleString() }}</span>
+                </template>
+
+                <template slot="typeTemplate" slot-scope="text">
+                  <span :class="'knife4j-request-' + text">{{ text }}</span>
+                </template>
+
+                <template slot="datatypeTemplate" slot-scope="text, record">
+                  <data-type :text="text" :record="record"></data-type>
+                </template>
+              </a-table>
+              <!--响应状态-->
+              <div class="api-title">响应状态</div>
+              <a-table
+                :columns="responseStatuscolumns"
+                :data-source="api.responseCodes"
+                row-key="code"
+                size="small"
+                :pagination="page"
+              >
+                <template slot="descriptionTemplate" slot-scope="text">
+                  <div v-html="text"></div>
+                </template>
+              </a-table>
+              <!--响应参数-->
+              <!--响应参数需要判断是否存在多个code-schema的情况-->
+              <div v-if="api.multipartResponseSchema">
+                <!--多个响应编码code的情况在离线文档中需要单独遍历分开-->
+                <a-tabs v-for="resp in api.multipCodeDatas" :key="resp.code">
+                  <a-tab-pane :tab="resp.code">
+                    <!--判断响应头-->
+                    <div v-if="resp.responseHeaderParameters">
+                      <div class="api-title">响应Header</div>
+                      <a-table
+                        :columns="responseHeaderColumns"
+                        :data-source="resp.responseHeaderParameters"
+                        row-key="id"
+                        size="small"
+                        :pagination="page"
+                      >
+                      </a-table>
+                    </div>
+                    <!--响应参数-->
+                    <div class="api-title">响应参数</div>
+                    <a-table
+                      :columns="responseParametersColumns"
+                      :data-source="resp.data"
+                      row-key="id"
+                      size="small"
+                      :pagination="page"
+                    >
+                    </a-table>
+                    <div class="api-title">响应示例</div>
+                    <div class="api-editor-show" v-if="resp.responseBasicType">
+                      {{ resp.responseText }}
+                    </div>
+                    <pre
+                      class="knife4j-api-editor-show"
+                      v-else
+                      v-html="formaterJson(resp.responseValue)"
+                    ></pre>
+                    <!-- <editor-show :value="resp.responseBasicType ? resp.responseText : resp.responseValue"></editor-show> -->
+                    <!-- <editor :value="resp.responseBasicType ? resp.responseText : resp.responseValue" @init="multiResponseSampleEditorInit" lang="json" theme="eclipse" width="100%" :height="editorMultiHeight"></editor> -->
+                  </a-tab-pane>
+                </a-tabs>
+              </div>
+              <div v-else>
+                <!--判断响应头-->
+                <div v-if="api.responseHeaderParameters">
+                  <div class="api-title">响应Header</div>
+                  <a-table
+                    :columns="responseHeaderColumns"
+                    :data-source="api.responseHeaderParameters"
+                    row-key="id"
+                    size="small"
+                    :pagination="page"
+                  >
+                  </a-table>
+                </div>
+                <!--响应参数-->
+                <div class="api-title">响应参数</div>
+                <a-table
+                  :columns="responseParametersColumns"
+                  :data-source="api.multipData.data"
+                  row-key="id"
+                  size="small"
+                  :pagination="page"
+                >
+                </a-table>
+                <div class="api-title">响应示例</div>
+                <div
+                  class="api-editor-show"
+                  v-if="api.multipData.responseBasicType"
+                >
+                  {{ api.multipData.responseText }}
+                </div>
+                <pre
+                  class="knife4j-api-editor-show"
+                  v-else
+                  v-html="formaterJson(api.multipData.responseValue)"
+                ></pre>
+              </div>
+
+              <!--接口遍历结束-->
+            </div>
+          </a-row>
+        </a-row>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.9/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ant-design-vue@1.4.10/dist/antd.min.js"></script>
+    <script type="text/javascript">
+      function getData() {
+        var datas = {
+          instance: {
+            title: 'OpenAPI definition',
+            description: 'OpenAPI definition',
+            contact: '',
+            version: 'v0',
+            host: 'http://localhost:2025',
+            basePath: '/',
+            termsOfService: '',
+            name: '-v3-api-docs',
+            url: '/v3/api-docs',
+            location: '/v3/api-docs',
+            pathArrs: [
+              { method: 'GET', count: 8 },
+              { method: 'POST', count: 12 },
+            ],
+          },
+          hideShow: true,
+          tags: [
+            {
+              name: '用户信息管理',
+              description: null,
+              order: 2147483647,
+              author: null,
+              childrens: [
+                {
+                  id: '14e760726fc0c6315b86ba27df3ffaec',
+                  operationId: 'updateProfile',
+                  deprecated: false,
+                  summary: '更新用户信息',
+                  methodType: 'POST',
+                  showUrl: '/api/profile/update',
+                  consumes: [
+                    'application/x-www-form-urlencoded',
+                    'application/json',
+                  ],
+                  produces: ['*/*'],
+                  author: null,
+                  description:
+                    '<p>更新用户名、昵称、邮箱，每个字段一个月只能修改一次</p>\n',
+                  requestValue:
+                    '{\n  "username": "",\n  "nickname": "",\n  "email": "",\n  "emailVerificationCode": ""\n}',
+                  reqParameters: [
+                    {
+                      name: 'updateProfileRequest',
+                      children: [
+                        {
+                          name: 'username',
+                          children: null,
+                          description: '',
+                          in: null,
+                          require: false,
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'nickname',
+                          children: null,
+                          description: '',
+                          in: null,
+                          require: false,
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'email',
+                          children: null,
+                          description: '',
+                          in: null,
+                          require: false,
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'emailVerificationCode',
+                          children: null,
+                          description: '',
+                          in: null,
+                          require: false,
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                      ],
+                      description: 'UpdateProfileRequest',
+                      in: 'body',
+                      require: true,
+                      type: 'UpdateProfileRequest',
+                      schemaValue: 'UpdateProfileRequest',
+                    },
+                  ],
+                  responseCodes: [
+                    {
+                      code: '200',
+                      description: 'OK',
+                      schema: 'ResultProfileUpdateResult',
+                    },
+                    {
+                      code: '500',
+                      description: 'Internal Server Error',
+                      schema: 'ResultString',
+                    },
+                  ],
+                  multipartResponseSchema: true,
+                  multipCodeDatas: [
+                    {
+                      code: '200',
+                      responseHeaderParameters: null,
+                      data: [
+                        {
+                          name: 'code',
+                          children: null,
+                          description: '',
+                          id: 'param21',
+                          type: 'integer(int32)',
+                          schemaValue: 'integer(int32)',
+                        },
+                        {
+                          name: 'message',
+                          children: null,
+                          description: '',
+                          id: 'param22',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'data',
+                          children: [
+                            {
+                              name: 'updatedFields',
+                              children: null,
+                              description: '',
+                              id: 'param62',
+                              type: 'object',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'restrictedFields',
+                              children: null,
+                              description: '',
+                              id: 'param63',
+                              type: 'object',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'userInfo',
+                              children: [
+                                {
+                                  name: 'token',
+                                  children: null,
+                                  description: '',
+                                  id: 'param77',
+                                  type: 'string',
+                                  schemaValue: null,
+                                },
+                                {
+                                  name: 'userId',
+                                  children: null,
+                                  description: '',
+                                  id: 'param78',
+                                  type: 'integer',
+                                  schemaValue: null,
+                                },
+                                {
+                                  name: 'username',
+                                  children: null,
+                                  description: '',
+                                  id: 'param79',
+                                  type: 'string',
+                                  schemaValue: null,
+                                },
+                                {
+                                  name: 'nickname',
+                                  children: null,
+                                  description: '',
+                                  id: 'param80',
+                                  type: 'string',
+                                  schemaValue: null,
+                                },
+                                {
+                                  name: 'email',
+                                  children: null,
+                                  description: '',
+                                  id: 'param81',
+                                  type: 'string',
+                                  schemaValue: null,
+                                },
+                                {
+                                  name: 'avatarUrl',
+                                  children: null,
+                                  description: '',
+                                  id: 'param82',
+                                  type: 'string',
+                                  schemaValue: null,
+                                },
+                                {
+                                  name: 'role',
+                                  children: null,
+                                  description: '',
+                                  id: 'param83',
+                                  type: 'string',
+                                  schemaValue: null,
+                                },
+                                {
+                                  name: 'points',
+                                  children: null,
+                                  description: '',
+                                  id: 'param84',
+                                  type: 'integer',
+                                  schemaValue: null,
+                                },
+                              ],
+                              description: '',
+                              id: 'param64',
+                              type: 'LoginResponse',
+                              schemaValue: 'LoginResponse',
+                            },
+                            {
+                              name: 'message',
+                              children: null,
+                              description: '',
+                              id: 'param73',
+                              type: 'string',
+                              schemaValue: null,
+                            },
+                          ],
+                          description: '',
+                          id: 'param23',
+                          type: 'ProfileUpdateResult',
+                          schemaValue: 'ProfileUpdateResult',
+                        },
+                      ],
+                      responseBasicType: false,
+                      responseText: null,
+                      responseValue:
+                        '{\n\t"code": 0,\n\t"message": "",\n\t"data": {\n\t\t"updatedFields": {},\n\t\t"restrictedFields": {},\n\t\t"userInfo": {\n\t\t\t"token": "",\n\t\t\t"userId": 0,\n\t\t\t"username": "",\n\t\t\t"nickname": "",\n\t\t\t"email": "",\n\t\t\t"avatarUrl": "",\n\t\t\t"role": "",\n\t\t\t"points": 0\n\t\t},\n\t\t"message": ""\n\t}\n}',
+                    },
+                    {
+                      code: '500',
+                      responseHeaderParameters: null,
+                      data: [
+                        {
+                          name: 'code',
+                          children: null,
+                          description: '',
+                          id: 'param51',
+                          type: 'integer(int32)',
+                          schemaValue: 'integer(int32)',
+                        },
+                        {
+                          name: 'message',
+                          children: null,
+                          description: '',
+                          id: 'param52',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'data',
+                          children: null,
+                          description: '',
+                          id: 'param53',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                      ],
+                      responseBasicType: false,
+                      responseText: null,
+                      responseValue:
+                        '{\n\t"code": 0,\n\t"message": "",\n\t"data": ""\n}',
+                    },
+                  ],
+                  responseHeaderParameters: null,
+                  multipData: {},
+                },
+                {
+                  id: 'f8ce629ebe94f69cb21bbe91f5e58852',
+                  operationId: 'sendPasswordResetCode',
+                  deprecated: false,
+                  summary: '发送密码重置验证码',
+                  methodType: 'POST',
+                  showUrl: '/api/profile/send-reset-code',
+                  consumes: ['application/x-www-form-urlencoded'],
+                  produces: ['*/*'],
+                  author: null,
+                  description: '<p>通过邮箱发送密码重置验证码</p>\n',
+                  requestValue: null,
+                  reqParameters: [
+                    {
+                      name: 'email',
+                      children: null,
+                      description: '',
+                      in: 'query',
+                      require: true,
+                      type: 'string',
+                      schemaValue: null,
+                    },
+                  ],
+                  responseCodes: [
+                    { code: '200', description: 'OK', schema: 'ResultString' },
+                    {
+                      code: '500',
+                      description: 'Internal Server Error',
+                      schema: 'ResultString',
+                    },
+                  ],
+                  multipartResponseSchema: true,
+                  multipCodeDatas: [
+                    {
+                      code: '200',
+                      responseHeaderParameters: null,
+                      data: [
+                        {
+                          name: 'code',
+                          children: null,
+                          description: '',
+                          id: 'param87',
+                          type: 'integer(int32)',
+                          schemaValue: 'integer(int32)',
+                        },
+                        {
+                          name: 'message',
+                          children: null,
+                          description: '',
+                          id: 'param88',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'data',
+                          children: null,
+                          description: '',
+                          id: 'param89',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                      ],
+                      responseBasicType: false,
+                      responseText: null,
+                      responseValue:
+                        '{\n\t"code": 0,\n\t"message": "",\n\t"data": ""\n}',
+                    },
+                    {
+                      code: '500',
+                      responseHeaderParameters: null,
+                      data: [
+                        {
+                          name: 'code',
+                          children: null,
+                          description: '',
+                          id: 'param90',
+                          type: 'integer(int32)',
+                          schemaValue: 'integer(int32)',
+                        },
+                        {
+                          name: 'message',
+                          children: null,
+                          description: '',
+                          id: 'param91',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'data',
+                          children: null,
+                          description: '',
+                          id: 'param92',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                      ],
+                      responseBasicType: false,
+                      responseText: null,
+                      responseValue:
+                        '{\n\t"code": 0,\n\t"message": "",\n\t"data": ""\n}',
+                    },
+                  ],
+                  responseHeaderParameters: null,
+                  multipData: {},
+                },
+                {
+                  id: '42ff0ac7e23f55bff939bb75aa7d297d',
+                  operationId: 'resetPassword',
+                  deprecated: false,
+                  summary: '重置密码',
+                  methodType: 'POST',
+                  showUrl: '/api/profile/reset-password',
+                  consumes: [
+                    'application/x-www-form-urlencoded',
+                    'application/json',
+                  ],
+                  produces: ['*/*'],
+                  author: null,
+                  description: '<p>通过邮箱验证码重置密码</p>\n',
+                  requestValue:
+                    '{\n  "email": "",\n  "verificationCode": "",\n  "newPassword": "",\n  "confirmNewPassword": ""\n}',
+                  reqParameters: [
+                    {
+                      name: 'resetPasswordRequest',
+                      children: [
+                        {
+                          name: 'email',
+                          children: null,
+                          description: '',
+                          in: null,
+                          require: true,
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'verificationCode',
+                          children: null,
+                          description: '',
+                          in: null,
+                          require: true,
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'newPassword',
+                          children: null,
+                          description: '',
+                          in: null,
+                          require: true,
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'confirmNewPassword',
+                          children: null,
+                          description: '',
+                          in: null,
+                          require: true,
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                      ],
+                      description: 'ResetPasswordRequest',
+                      in: 'body',
+                      require: true,
+                      type: 'ResetPasswordRequest',
+                      schemaValue: 'ResetPasswordRequest',
+                    },
+                  ],
+                  responseCodes: [
+                    { code: '200', description: 'OK', schema: 'ResultString' },
+                    {
+                      code: '500',
+                      description: 'Internal Server Error',
+                      schema: 'ResultString',
+                    },
+                  ],
+                  multipartResponseSchema: true,
+                  multipCodeDatas: [
+                    {
+                      code: '200',
+                      responseHeaderParameters: null,
+                      data: [
+                        {
+                          name: 'code',
+                          children: null,
+                          description: '',
+                          id: 'param216',
+                          type: 'integer(int32)',
+                          schemaValue: 'integer(int32)',
+                        },
+                        {
+                          name: 'message',
+                          children: null,
+                          description: '',
+                          id: 'param217',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'data',
+                          children: null,
+                          description: '',
+                          id: 'param218',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                      ],
+                      responseBasicType: false,
+                      responseText: null,
+                      responseValue:
+                        '{\n\t"code": 0,\n\t"message": "",\n\t"data": ""\n}',
+                    },
+                    {
+                      code: '500',
+                      responseHeaderParameters: null,
+                      data: [
+                        {
+                          name: 'code',
+                          children: null,
+                          description: '',
+                          id: 'param219',
+                          type: 'integer(int32)',
+                          schemaValue: 'integer(int32)',
+                        },
+                        {
+                          name: 'message',
+                          children: null,
+                          description: '',
+                          id: 'param220',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'data',
+                          children: null,
+                          description: '',
+                          id: 'param221',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                      ],
+                      responseBasicType: false,
+                      responseText: null,
+                      responseValue:
+                        '{\n\t"code": 0,\n\t"message": "",\n\t"data": ""\n}',
+                    },
+                  ],
+                  responseHeaderParameters: null,
+                  multipData: {},
+                },
+                {
+                  id: '17f4e5f1fc5a58d9099c0b1b9e233e68',
+                  operationId: 'changePassword',
+                  deprecated: false,
+                  summary: '修改密码',
+                  methodType: 'POST',
+                  showUrl: '/api/profile/change-password',
+                  consumes: [
+                    'application/x-www-form-urlencoded',
+                    'application/json',
+                  ],
+                  produces: ['*/*'],
+                  author: null,
+                  description: '<p>用户修改登录密码</p>\n',
+                  requestValue:
+                    '{\n  "currentPassword": "",\n  "newPassword": "",\n  "confirmNewPassword": ""\n}',
+                  reqParameters: [
+                    {
+                      name: 'changePasswordRequest',
+                      children: [
+                        {
+                          name: 'currentPassword',
+                          children: null,
+                          description: '',
+                          in: null,
+                          require: true,
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'newPassword',
+                          children: null,
+                          description: '',
+                          in: null,
+                          require: true,
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'confirmNewPassword',
+                          children: null,
+                          description: '',
+                          in: null,
+                          require: true,
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                      ],
+                      description: 'ChangePasswordRequest',
+                      in: 'body',
+                      require: true,
+                      type: 'ChangePasswordRequest',
+                      schemaValue: 'ChangePasswordRequest',
+                    },
+                  ],
+                  responseCodes: [
+                    { code: '200', description: 'OK', schema: 'ResultString' },
+                    {
+                      code: '500',
+                      description: 'Internal Server Error',
+                      schema: 'ResultString',
+                    },
+                  ],
+                  multipartResponseSchema: true,
+                  multipCodeDatas: [
+                    {
+                      code: '200',
+                      responseHeaderParameters: null,
+                      data: [
+                        {
+                          name: 'code',
+                          children: null,
+                          description: '',
+                          id: 'param291',
+                          type: 'integer(int32)',
+                          schemaValue: 'integer(int32)',
+                        },
+                        {
+                          name: 'message',
+                          children: null,
+                          description: '',
+                          id: 'param292',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'data',
+                          children: null,
+                          description: '',
+                          id: 'param293',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                      ],
+                      responseBasicType: false,
+                      responseText: null,
+                      responseValue:
+                        '{\n\t"code": 0,\n\t"message": "",\n\t"data": ""\n}',
+                    },
+                    {
+                      code: '500',
+                      responseHeaderParameters: null,
+                      data: [
+                        {
+                          name: 'code',
+                          children: null,
+                          description: '',
+                          id: 'param294',
+                          type: 'integer(int32)',
+                          schemaValue: 'integer(int32)',
+                        },
+                        {
+                          name: 'message',
+                          children: null,
+                          description: '',
+                          id: 'param295',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'data',
+                          children: null,
+                          description: '',
+                          id: 'param296',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                      ],
+                      responseBasicType: false,
+                      responseText: null,
+                      responseValue:
+                        '{\n\t"code": 0,\n\t"message": "",\n\t"data": ""\n}',
+                    },
+                  ],
+                  responseHeaderParameters: null,
+                  multipData: {},
+                },
+                {
+                  id: '3490505a8d5c3ea6cc090e222d35223d',
+                  operationId: 'getPasswordStrengthRequirements',
+                  deprecated: false,
+                  summary: '密码强度要求',
+                  methodType: 'GET',
+                  showUrl: '/api/profile/password-strength',
+                  consumes: ['application/x-www-form-urlencoded'],
+                  produces: ['*/*'],
+                  author: null,
+                  description: '<p>获取密码强度要求说明</p>\n',
+                  requestValue: null,
+                  reqParameters: null,
+                  responseCodes: [
+                    { code: '200', description: 'OK', schema: 'ResultString' },
+                    {
+                      code: '500',
+                      description: 'Internal Server Error',
+                      schema: 'ResultString',
+                    },
+                  ],
+                  multipartResponseSchema: true,
+                  multipCodeDatas: [
+                    {
+                      code: '200',
+                      responseHeaderParameters: null,
+                      data: [
+                        {
+                          name: 'code',
+                          children: null,
+                          description: '',
+                          id: 'param300',
+                          type: 'integer(int32)',
+                          schemaValue: 'integer(int32)',
+                        },
+                        {
+                          name: 'message',
+                          children: null,
+                          description: '',
+                          id: 'param301',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'data',
+                          children: null,
+                          description: '',
+                          id: 'param302',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                      ],
+                      responseBasicType: false,
+                      responseText: null,
+                      responseValue:
+                        '{\n\t"code": 0,\n\t"message": "",\n\t"data": ""\n}',
+                    },
+                    {
+                      code: '500',
+                      responseHeaderParameters: null,
+                      data: [
+                        {
+                          name: 'code',
+                          children: null,
+                          description: '',
+                          id: 'param303',
+                          type: 'integer(int32)',
+                          schemaValue: 'integer(int32)',
+                        },
+                        {
+                          name: 'message',
+                          children: null,
+                          description: '',
+                          id: 'param304',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'data',
+                          children: null,
+                          description: '',
+                          id: 'param305',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                      ],
+                      responseBasicType: false,
+                      responseText: null,
+                      responseValue:
+                        '{\n\t"code": 0,\n\t"message": "",\n\t"data": ""\n}',
+                    },
+                  ],
+                  responseHeaderParameters: null,
+                  multipData: {},
+                },
+              ],
+              hasNew: false,
+              hasChanged: false,
+            },
+            {
+              name: '用户认证',
+              description: null,
+              order: 2147483647,
+              author: null,
+              childrens: [
+                {
+                  id: 'e615dea0a48d4daae5c153f697118691',
+                  operationId: 'sendSmsCode',
+                  deprecated: false,
+                  summary: '发送短信验证码',
+                  methodType: 'POST',
+                  showUrl: '/api/auth/send-sms-code',
+                  consumes: ['application/x-www-form-urlencoded'],
+                  produces: ['*/*'],
+                  author: null,
+                  description: '<p>发送手机验证码用于注册或登录</p>\n',
+                  requestValue: null,
+                  reqParameters: [
+                    {
+                      name: 'phone',
+                      children: null,
+                      description: '',
+                      in: 'query',
+                      require: true,
+                      type: 'string',
+                      schemaValue: null,
+                    },
+                  ],
+                  responseCodes: [
+                    { code: '200', description: 'OK', schema: 'ResultString' },
+                    {
+                      code: '500',
+                      description: 'Internal Server Error',
+                      schema: 'ResultString',
+                    },
+                  ],
+                  multipartResponseSchema: true,
+                  multipCodeDatas: [
+                    {
+                      code: '200',
+                      responseHeaderParameters: null,
+                      data: [
+                        {
+                          name: 'code',
+                          children: null,
+                          description: '',
+                          id: 'param307',
+                          type: 'integer(int32)',
+                          schemaValue: 'integer(int32)',
+                        },
+                        {
+                          name: 'message',
+                          children: null,
+                          description: '',
+                          id: 'param308',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'data',
+                          children: null,
+                          description: '',
+                          id: 'param309',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                      ],
+                      responseBasicType: false,
+                      responseText: null,
+                      responseValue:
+                        '{\n\t"code": 0,\n\t"message": "",\n\t"data": ""\n}',
+                    },
+                    {
+                      code: '500',
+                      responseHeaderParameters: null,
+                      data: [
+                        {
+                          name: 'code',
+                          children: null,
+                          description: '',
+                          id: 'param310',
+                          type: 'integer(int32)',
+                          schemaValue: 'integer(int32)',
+                        },
+                        {
+                          name: 'message',
+                          children: null,
+                          description: '',
+                          id: 'param311',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'data',
+                          children: null,
+                          description: '',
+                          id: 'param312',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                      ],
+                      responseBasicType: false,
+                      responseText: null,
+                      responseValue:
+                        '{\n\t"code": 0,\n\t"message": "",\n\t"data": ""\n}',
+                    },
+                  ],
+                  responseHeaderParameters: null,
+                  multipData: {},
+                },
+                {
+                  id: '6ca818b745d4241400262acc9c638e69',
+                  operationId: 'sendEmailCode',
+                  deprecated: false,
+                  summary: '发送邮箱验证码',
+                  methodType: 'POST',
+                  showUrl: '/api/auth/send-email-code',
+                  consumes: ['application/x-www-form-urlencoded'],
+                  produces: ['*/*'],
+                  author: null,
+                  description: '<p>发送邮箱验证码用于注册或登录</p>\n',
+                  requestValue: null,
+                  reqParameters: [
+                    {
+                      name: 'email',
+                      children: null,
+                      description: '',
+                      in: 'query',
+                      require: true,
+                      type: 'string',
+                      schemaValue: null,
+                    },
+                  ],
+                  responseCodes: [
+                    { code: '200', description: 'OK', schema: 'ResultString' },
+                    {
+                      code: '500',
+                      description: 'Internal Server Error',
+                      schema: 'ResultString',
+                    },
+                  ],
+                  multipartResponseSchema: true,
+                  multipCodeDatas: [
+                    {
+                      code: '200',
+                      responseHeaderParameters: null,
+                      data: [
+                        {
+                          name: 'code',
+                          children: null,
+                          description: '',
+                          id: 'param94',
+                          type: 'integer(int32)',
+                          schemaValue: 'integer(int32)',
+                        },
+                        {
+                          name: 'message',
+                          children: null,
+                          description: '',
+                          id: 'param95',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'data',
+                          children: null,
+                          description: '',
+                          id: 'param96',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                      ],
+                      responseBasicType: false,
+                      responseText: null,
+                      responseValue:
+                        '{\n\t"code": 0,\n\t"message": "",\n\t"data": ""\n}',
+                    },
+                    {
+                      code: '500',
+                      responseHeaderParameters: null,
+                      data: [
+                        {
+                          name: 'code',
+                          children: null,
+                          description: '',
+                          id: 'param97',
+                          type: 'integer(int32)',
+                          schemaValue: 'integer(int32)',
+                        },
+                        {
+                          name: 'message',
+                          children: null,
+                          description: '',
+                          id: 'param98',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'data',
+                          children: null,
+                          description: '',
+                          id: 'param99',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                      ],
+                      responseBasicType: false,
+                      responseText: null,
+                      responseValue:
+                        '{\n\t"code": 0,\n\t"message": "",\n\t"data": ""\n}',
+                    },
+                  ],
+                  responseHeaderParameters: null,
+                  multipData: {},
+                },
+                {
+                  id: 'fdcc4dc4d7c76c10f70baaa51c10e514',
+                  operationId: 'register',
+                  deprecated: false,
+                  summary: '用户注册',
+                  methodType: 'POST',
+                  showUrl: '/api/auth/register',
+                  consumes: [
+                    'application/x-www-form-urlencoded',
+                    'application/json',
+                  ],
+                  produces: ['*/*'],
+                  author: null,
+                  description: '<p>支持邮箱和手机号注册</p>\n',
+                  requestValue:
+                    '{\n  "username": "",\n  "nickname": "",\n  "email": "",\n  "phone": "",\n  "password": "",\n  "confirmPassword": "",\n  "verificationCode": ""\n}',
+                  reqParameters: [
+                    {
+                      name: 'registerRequest',
+                      children: [
+                        {
+                          name: 'username',
+                          children: null,
+                          description: '',
+                          in: null,
+                          require: true,
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'nickname',
+                          children: null,
+                          description: '',
+                          in: null,
+                          require: false,
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'email',
+                          children: null,
+                          description: '',
+                          in: null,
+                          require: false,
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'phone',
+                          children: null,
+                          description: '',
+                          in: null,
+                          require: false,
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'password',
+                          children: null,
+                          description: '',
+                          in: null,
+                          require: true,
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'confirmPassword',
+                          children: null,
+                          description: '',
+                          in: null,
+                          require: true,
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'verificationCode',
+                          children: null,
+                          description: '',
+                          in: null,
+                          require: false,
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                      ],
+                      description: 'RegisterRequest',
+                      in: 'body',
+                      require: true,
+                      type: 'RegisterRequest',
+                      schemaValue: 'RegisterRequest',
+                    },
+                  ],
+                  responseCodes: [
+                    { code: '200', description: 'OK', schema: 'ResultUser' },
+                    {
+                      code: '500',
+                      description: 'Internal Server Error',
+                      schema: 'ResultString',
+                    },
+                  ],
+                  multipartResponseSchema: true,
+                  multipCodeDatas: [
+                    {
+                      code: '200',
+                      responseHeaderParameters: null,
+                      data: [
+                        {
+                          name: 'code',
+                          children: null,
+                          description: '',
+                          id: 'param127',
+                          type: 'integer(int32)',
+                          schemaValue: 'integer(int32)',
+                        },
+                        {
+                          name: 'message',
+                          children: null,
+                          description: '',
+                          id: 'param128',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'data',
+                          children: [
+                            {
+                              name: 'id',
+                              children: null,
+                              description: '',
+                              id: 'param179',
+                              type: 'integer(int64)',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'username',
+                              children: null,
+                              description: '',
+                              id: 'param180',
+                              type: 'string',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'nickname',
+                              children: null,
+                              description: '',
+                              id: 'param181',
+                              type: 'string',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'email',
+                              children: null,
+                              description: '',
+                              id: 'param182',
+                              type: 'string',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'phone',
+                              children: null,
+                              description: '',
+                              id: 'param183',
+                              type: 'string',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'passwordHash',
+                              children: null,
+                              description: '',
+                              id: 'param184',
+                              type: 'string',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'authSource',
+                              children: null,
+                              description:
+                                '可用值:EMAIL,PHONE,WECHAT,GITHUB,GOOGLE',
+                              id: 'param185',
+                              type: 'string',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'openId',
+                              children: null,
+                              description: '',
+                              id: 'param186',
+                              type: 'string',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'avatarUrl',
+                              children: null,
+                              description: '',
+                              id: 'param187',
+                              type: 'string',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'role',
+                              children: null,
+                              description: '可用值:USER,ADMIN,MODERATOR',
+                              id: 'param188',
+                              type: 'string',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'points',
+                              children: null,
+                              description: '',
+                              id: 'param189',
+                              type: 'integer(int32)',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'createdAt',
+                              children: null,
+                              description: '',
+                              id: 'param190',
+                              type: 'string(date-time)',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'updatedAt',
+                              children: null,
+                              description: '',
+                              id: 'param191',
+                              type: 'string(date-time)',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'nicknameUpdatedAt',
+                              children: null,
+                              description: '',
+                              id: 'param192',
+                              type: 'string(date-time)',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'usernameUpdatedAt',
+                              children: null,
+                              description: '',
+                              id: 'param193',
+                              type: 'string(date-time)',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'emailUpdatedAt',
+                              children: null,
+                              description: '',
+                              id: 'param194',
+                              type: 'string(date-time)',
+                              schemaValue: null,
+                            },
+                          ],
+                          description: '',
+                          id: 'param129',
+                          type: 'User',
+                          schemaValue: 'User',
+                        },
+                      ],
+                      responseBasicType: false,
+                      responseText: null,
+                      responseValue:
+                        '{\n\t"code": 0,\n\t"message": "",\n\t"data": {\n\t\t"id": 0,\n\t\t"username": "",\n\t\t"nickname": "",\n\t\t"email": "",\n\t\t"phone": "",\n\t\t"passwordHash": "",\n\t\t"authSource": "",\n\t\t"openId": "",\n\t\t"avatarUrl": "",\n\t\t"role": "",\n\t\t"points": 0,\n\t\t"createdAt": "",\n\t\t"updatedAt": "",\n\t\t"nicknameUpdatedAt": "",\n\t\t"usernameUpdatedAt": "",\n\t\t"emailUpdatedAt": ""\n\t}\n}',
+                    },
+                    {
+                      code: '500',
+                      responseHeaderParameters: null,
+                      data: [
+                        {
+                          name: 'code',
+                          children: null,
+                          description: '',
+                          id: 'param162',
+                          type: 'integer(int32)',
+                          schemaValue: 'integer(int32)',
+                        },
+                        {
+                          name: 'message',
+                          children: null,
+                          description: '',
+                          id: 'param163',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'data',
+                          children: null,
+                          description: '',
+                          id: 'param164',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                      ],
+                      responseBasicType: false,
+                      responseText: null,
+                      responseValue:
+                        '{\n\t"code": 0,\n\t"message": "",\n\t"data": ""\n}',
+                    },
+                  ],
+                  responseHeaderParameters: null,
+                  multipData: {},
+                },
+                {
+                  id: 'e24134ca81c89ba2d92b7e99b3901500',
+                  operationId: 'login',
+                  deprecated: false,
+                  summary: '用户登录',
+                  methodType: 'POST',
+                  showUrl: '/api/auth/login',
+                  consumes: [
+                    'application/x-www-form-urlencoded',
+                    'application/json',
+                  ],
+                  produces: ['*/*'],
+                  author: null,
+                  description:
+                    '<p>支持邮箱、手机号、用户名、GitHub多种登录方式</p>\n',
+                  requestValue:
+                    '{\n  "loginType": "",\n  "identifier": "",\n  "password": "",\n  "verificationCode": "",\n  "authCode": ""\n}',
+                  reqParameters: [
+                    {
+                      name: 'loginRequest',
+                      children: [
+                        {
+                          name: 'loginType',
+                          children: null,
+                          description: '',
+                          in: null,
+                          require: true,
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'identifier',
+                          children: null,
+                          description: '',
+                          in: null,
+                          require: true,
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'password',
+                          children: null,
+                          description: '',
+                          in: null,
+                          require: false,
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'verificationCode',
+                          children: null,
+                          description: '',
+                          in: null,
+                          require: false,
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'authCode',
+                          children: null,
+                          description: '',
+                          in: null,
+                          require: false,
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                      ],
+                      description: 'LoginRequest',
+                      in: 'body',
+                      require: true,
+                      type: 'LoginRequest',
+                      schemaValue: 'LoginRequest',
+                    },
+                  ],
+                  responseCodes: [
+                    {
+                      code: '200',
+                      description: 'OK',
+                      schema: 'ResultLoginResponse',
+                    },
+                    {
+                      code: '500',
+                      description: 'Internal Server Error',
+                      schema: 'ResultString',
+                    },
+                  ],
+                  multipartResponseSchema: true,
+                  multipCodeDatas: [
+                    {
+                      code: '200',
+                      responseHeaderParameters: null,
+                      data: [
+                        {
+                          name: 'code',
+                          children: null,
+                          description: '',
+                          id: 'param239',
+                          type: 'integer(int32)',
+                          schemaValue: 'integer(int32)',
+                        },
+                        {
+                          name: 'message',
+                          children: null,
+                          description: '',
+                          id: 'param240',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'data',
+                          children: [
+                            {
+                              name: 'token',
+                              children: null,
+                              description: '',
+                              id: 'param271',
+                              type: 'string',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'userId',
+                              children: null,
+                              description: '',
+                              id: 'param272',
+                              type: 'integer(int64)',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'username',
+                              children: null,
+                              description: '',
+                              id: 'param273',
+                              type: 'string',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'nickname',
+                              children: null,
+                              description: '',
+                              id: 'param274',
+                              type: 'string',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'email',
+                              children: null,
+                              description: '',
+                              id: 'param275',
+                              type: 'string',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'avatarUrl',
+                              children: null,
+                              description: '',
+                              id: 'param276',
+                              type: 'string',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'role',
+                              children: null,
+                              description: '',
+                              id: 'param277',
+                              type: 'string',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'points',
+                              children: null,
+                              description: '',
+                              id: 'param278',
+                              type: 'integer(int32)',
+                              schemaValue: null,
+                            },
+                          ],
+                          description: '',
+                          id: 'param241',
+                          type: 'LoginResponse',
+                          schemaValue: 'LoginResponse',
+                        },
+                      ],
+                      responseBasicType: false,
+                      responseText: null,
+                      responseValue:
+                        '{\n\t"code": 0,\n\t"message": "",\n\t"data": {\n\t\t"token": "",\n\t\t"userId": 0,\n\t\t"username": "",\n\t\t"nickname": "",\n\t\t"email": "",\n\t\t"avatarUrl": "",\n\t\t"role": "",\n\t\t"points": 0\n\t}\n}',
+                    },
+                    {
+                      code: '500',
+                      responseHeaderParameters: null,
+                      data: [
+                        {
+                          name: 'code',
+                          children: null,
+                          description: '',
+                          id: 'param258',
+                          type: 'integer(int32)',
+                          schemaValue: 'integer(int32)',
+                        },
+                        {
+                          name: 'message',
+                          children: null,
+                          description: '',
+                          id: 'param259',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'data',
+                          children: null,
+                          description: '',
+                          id: 'param260',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                      ],
+                      responseBasicType: false,
+                      responseText: null,
+                      responseValue:
+                        '{\n\t"code": 0,\n\t"message": "",\n\t"data": ""\n}',
+                    },
+                  ],
+                  responseHeaderParameters: null,
+                  multipData: {},
+                },
+                {
+                  id: '26a7d65ef7509bb844299b380020a9d6',
+                  operationId: 'githubCallback',
+                  deprecated: false,
+                  summary: 'GitHub登录回调',
+                  methodType: 'GET',
+                  showUrl: '/api/auth/github/callback',
+                  consumes: ['application/x-www-form-urlencoded'],
+                  produces: ['*/*'],
+                  author: null,
+                  description: '<p>GitHub OAuth登录回调处理</p>\n',
+                  requestValue: null,
+                  reqParameters: [
+                    {
+                      name: 'code',
+                      children: null,
+                      description: '',
+                      in: 'query',
+                      require: true,
+                      type: 'string',
+                      schemaValue: null,
+                    },
+                  ],
+                  responseCodes: [
+                    {
+                      code: '200',
+                      description: 'OK',
+                      schema: 'ResultLoginResponse',
+                    },
+                    {
+                      code: '500',
+                      description: 'Internal Server Error',
+                      schema: 'ResultString',
+                    },
+                  ],
+                  multipartResponseSchema: true,
+                  multipCodeDatas: [
+                    {
+                      code: '200',
+                      responseHeaderParameters: null,
+                      data: [
+                        {
+                          name: 'code',
+                          children: null,
+                          description: '',
+                          id: 'param314',
+                          type: 'integer(int32)',
+                          schemaValue: 'integer(int32)',
+                        },
+                        {
+                          name: 'message',
+                          children: null,
+                          description: '',
+                          id: 'param315',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'data',
+                          children: [
+                            {
+                              name: 'token',
+                              children: null,
+                              description: '',
+                              id: 'param271',
+                              type: 'string',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'userId',
+                              children: null,
+                              description: '',
+                              id: 'param272',
+                              type: 'integer(int64)',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'username',
+                              children: null,
+                              description: '',
+                              id: 'param273',
+                              type: 'string',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'nickname',
+                              children: null,
+                              description: '',
+                              id: 'param274',
+                              type: 'string',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'email',
+                              children: null,
+                              description: '',
+                              id: 'param275',
+                              type: 'string',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'avatarUrl',
+                              children: null,
+                              description: '',
+                              id: 'param276',
+                              type: 'string',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'role',
+                              children: null,
+                              description: '',
+                              id: 'param277',
+                              type: 'string',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'points',
+                              children: null,
+                              description: '',
+                              id: 'param278',
+                              type: 'integer(int32)',
+                              schemaValue: null,
+                            },
+                          ],
+                          description: '',
+                          id: 'param316',
+                          type: 'LoginResponse',
+                          schemaValue: 'LoginResponse',
+                        },
+                      ],
+                      responseBasicType: false,
+                      responseText: null,
+                      responseValue:
+                        '{\n\t"code": 0,\n\t"message": "",\n\t"data": {\n\t\t"token": "",\n\t\t"userId": 0,\n\t\t"username": "",\n\t\t"nickname": "",\n\t\t"email": "",\n\t\t"avatarUrl": "",\n\t\t"role": "",\n\t\t"points": 0\n\t}\n}',
+                    },
+                    {
+                      code: '500',
+                      responseHeaderParameters: null,
+                      data: [
+                        {
+                          name: 'code',
+                          children: null,
+                          description: '',
+                          id: 'param333',
+                          type: 'integer(int32)',
+                          schemaValue: 'integer(int32)',
+                        },
+                        {
+                          name: 'message',
+                          children: null,
+                          description: '',
+                          id: 'param334',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'data',
+                          children: null,
+                          description: '',
+                          id: 'param335',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                      ],
+                      responseBasicType: false,
+                      responseText: null,
+                      responseValue:
+                        '{\n\t"code": 0,\n\t"message": "",\n\t"data": ""\n}',
+                    },
+                  ],
+                  responseHeaderParameters: null,
+                  multipData: {},
+                },
+              ],
+              hasNew: false,
+              hasChanged: true,
+            },
+            {
+              name: '积分管理',
+              description: null,
+              order: 2147483647,
+              author: null,
+              childrens: [
+                {
+                  id: 'ef03d9044fcc8d9ccb941c86595ddf32',
+                  operationId: 'getPointHistory',
+                  deprecated: false,
+                  summary: '获取积分流水',
+                  methodType: 'GET',
+                  showUrl: '/api/points/history',
+                  consumes: ['application/x-www-form-urlencoded'],
+                  produces: ['*/*'],
+                  author: null,
+                  description: '<p>获取当前用户的积分变动历史</p>\n',
+                  requestValue: null,
+                  reqParameters: [
+                    {
+                      name: 'page',
+                      children: null,
+                      description: '',
+                      in: 'query',
+                      require: false,
+                      type: 'integer(int32)',
+                      schemaValue: null,
+                    },
+                    {
+                      name: 'size',
+                      children: null,
+                      description: '',
+                      in: 'query',
+                      require: false,
+                      type: 'integer(int32)',
+                      schemaValue: null,
+                    },
+                  ],
+                  responseCodes: [
+                    {
+                      code: '200',
+                      description: 'OK',
+                      schema: 'ResultListPointTransaction',
+                    },
+                    {
+                      code: '500',
+                      description: 'Internal Server Error',
+                      schema: 'ResultString',
+                    },
+                  ],
+                  multipartResponseSchema: true,
+                  multipCodeDatas: [
+                    {
+                      code: '200',
+                      responseHeaderParameters: null,
+                      data: [
+                        {
+                          name: 'code',
+                          children: null,
+                          description: '',
+                          id: 'param348',
+                          type: 'integer(int32)',
+                          schemaValue: 'integer(int32)',
+                        },
+                        {
+                          name: 'message',
+                          children: null,
+                          description: '',
+                          id: 'param349',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'data',
+                          children: [
+                            {
+                              name: 'id',
+                              children: null,
+                              description: '',
+                              id: 'param368',
+                              type: 'integer(int64)',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'userId',
+                              children: null,
+                              description: '',
+                              id: 'param369',
+                              type: 'integer(int64)',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'amount',
+                              children: null,
+                              description: '',
+                              id: 'param370',
+                              type: 'integer(int32)',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'type',
+                              children: null,
+                              description:
+                                '可用值:TASK_REWARD,REDEMPTION,ADJUSTMENT',
+                              id: 'param371',
+                              type: 'string',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'description',
+                              children: null,
+                              description: '',
+                              id: 'param372',
+                              type: 'string',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'referenceId',
+                              children: null,
+                              description: '',
+                              id: 'param373',
+                              type: 'integer(int64)',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'createdAt',
+                              children: null,
+                              description: '',
+                              id: 'param374',
+                              type: 'string(date-time)',
+                              schemaValue: null,
+                            },
+                          ],
+                          description: '',
+                          id: 'param350',
+                          type: 'array',
+                          schemaValue: 'PointTransaction',
+                        },
+                      ],
+                      responseBasicType: false,
+                      responseText: null,
+                      responseValue:
+                        '{\n\t"code": 0,\n\t"message": "",\n\t"data": [\n\t\t{\n\t\t\t"id": 0,\n\t\t\t"userId": 0,\n\t\t\t"amount": 0,\n\t\t\t"type": "",\n\t\t\t"description": "",\n\t\t\t"referenceId": 0,\n\t\t\t"createdAt": ""\n\t\t}\n\t]\n}',
+                    },
+                    {
+                      code: '500',
+                      responseHeaderParameters: null,
+                      data: [
+                        {
+                          name: 'code',
+                          children: null,
+                          description: '',
+                          id: 'param365',
+                          type: 'integer(int32)',
+                          schemaValue: 'integer(int32)',
+                        },
+                        {
+                          name: 'message',
+                          children: null,
+                          description: '',
+                          id: 'param366',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'data',
+                          children: null,
+                          description: '',
+                          id: 'param367',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                      ],
+                      responseBasicType: false,
+                      responseText: null,
+                      responseValue:
+                        '{\n\t"code": 0,\n\t"message": "",\n\t"data": ""\n}',
+                    },
+                  ],
+                  responseHeaderParameters: null,
+                  multipData: {},
+                },
+                {
+                  id: '5a53f6c02be48e2ed1712706a63fc31e',
+                  operationId: 'getPointBalance',
+                  deprecated: false,
+                  summary: '获取积分余额',
+                  methodType: 'GET',
+                  showUrl: '/api/points/balance',
+                  consumes: ['application/x-www-form-urlencoded'],
+                  produces: ['*/*'],
+                  author: null,
+                  description: '<p>获取当前用户的积分余额</p>\n',
+                  requestValue: null,
+                  reqParameters: null,
+                  responseCodes: [
+                    { code: '200', description: 'OK', schema: 'ResultInteger' },
+                    {
+                      code: '500',
+                      description: 'Internal Server Error',
+                      schema: 'ResultString',
+                    },
+                  ],
+                  multipartResponseSchema: true,
+                  multipCodeDatas: [
+                    {
+                      code: '200',
+                      responseHeaderParameters: null,
+                      data: [
+                        {
+                          name: 'code',
+                          children: null,
+                          description: '',
+                          id: 'param378',
+                          type: 'integer(int32)',
+                          schemaValue: 'integer(int32)',
+                        },
+                        {
+                          name: 'message',
+                          children: null,
+                          description: '',
+                          id: 'param379',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'data',
+                          children: null,
+                          description: '',
+                          id: 'param380',
+                          type: 'integer(int32)',
+                          schemaValue: 'integer(int32)',
+                        },
+                      ],
+                      responseBasicType: false,
+                      responseText: null,
+                      responseValue:
+                        '{\n\t"code": 0,\n\t"message": "",\n\t"data": 0\n}',
+                    },
+                    {
+                      code: '500',
+                      responseHeaderParameters: null,
+                      data: [
+                        {
+                          name: 'code',
+                          children: null,
+                          description: '',
+                          id: 'param381',
+                          type: 'integer(int32)',
+                          schemaValue: 'integer(int32)',
+                        },
+                        {
+                          name: 'message',
+                          children: null,
+                          description: '',
+                          id: 'param382',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'data',
+                          children: null,
+                          description: '',
+                          id: 'param383',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                      ],
+                      responseBasicType: false,
+                      responseText: null,
+                      responseValue:
+                        '{\n\t"code": 0,\n\t"message": "",\n\t"data": ""\n}',
+                    },
+                  ],
+                  responseHeaderParameters: null,
+                  multipData: {},
+                },
+              ],
+              hasNew: false,
+              hasChanged: true,
+            },
+            {
+              name: '任务管理',
+              description: null,
+              order: 2147483647,
+              author: null,
+              childrens: [
+                {
+                  id: 'e1135b0111ed2992590215a8875bfd1d',
+                  operationId: 'getTaskList',
+                  deprecated: false,
+                  summary: '获取任务列表',
+                  methodType: 'GET',
+                  showUrl: '/api/tasks',
+                  consumes: ['application/x-www-form-urlencoded'],
+                  produces: ['*/*'],
+                  author: null,
+                  description: '<p>分页获取任务列表</p>\n',
+                  requestValue: null,
+                  reqParameters: [
+                    {
+                      name: 'page',
+                      children: null,
+                      description: '',
+                      in: 'query',
+                      require: false,
+                      type: 'integer(int32)',
+                      schemaValue: null,
+                    },
+                    {
+                      name: 'size',
+                      children: null,
+                      description: '',
+                      in: 'query',
+                      require: false,
+                      type: 'integer(int32)',
+                      schemaValue: null,
+                    },
+                    {
+                      name: 'status',
+                      children: null,
+                      description: '',
+                      in: 'query',
+                      require: false,
+                      type: 'string',
+                      schemaValue: null,
+                    },
+                  ],
+                  responseCodes: [
+                    {
+                      code: '200',
+                      description: 'OK',
+                      schema: 'ResultPageTask',
+                    },
+                    {
+                      code: '500',
+                      description: 'Internal Server Error',
+                      schema: 'ResultString',
+                    },
+                  ],
+                  multipartResponseSchema: true,
+                  multipCodeDatas: [
+                    {
+                      code: '200',
+                      responseHeaderParameters: null,
+                      data: [
+                        {
+                          name: 'code',
+                          children: null,
+                          description: '',
+                          id: 'param411',
+                          type: 'integer(int32)',
+                          schemaValue: 'integer(int32)',
+                        },
+                        {
+                          name: 'message',
+                          children: null,
+                          description: '',
+                          id: 'param412',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'data',
+                          children: [
+                            {
+                              name: 'records',
+                              children: [
+                                {
+                                  name: 'id',
+                                  children: null,
+                                  description: '',
+                                  id: 'param460',
+                                  type: 'integer',
+                                  schemaValue: null,
+                                },
+                                {
+                                  name: 'title',
+                                  children: null,
+                                  description: '',
+                                  id: 'param461',
+                                  type: 'string',
+                                  schemaValue: null,
+                                },
+                                {
+                                  name: 'description',
+                                  children: null,
+                                  description: '',
+                                  id: 'param462',
+                                  type: 'string',
+                                  schemaValue: null,
+                                },
+                                {
+                                  name: 'points',
+                                  children: null,
+                                  description: '',
+                                  id: 'param463',
+                                  type: 'integer',
+                                  schemaValue: null,
+                                },
+                                {
+                                  name: 'status',
+                                  children: null,
+                                  description: '可用值:OPEN,CLOSED',
+                                  id: 'param464',
+                                  type: 'string',
+                                  schemaValue: null,
+                                },
+                                {
+                                  name: 'creatorId',
+                                  children: null,
+                                  description: '',
+                                  id: 'param465',
+                                  type: 'integer',
+                                  schemaValue: null,
+                                },
+                                {
+                                  name: 'createdAt',
+                                  children: null,
+                                  description: '',
+                                  id: 'param466',
+                                  type: 'string',
+                                  schemaValue: null,
+                                },
+                                {
+                                  name: 'updatedAt',
+                                  children: null,
+                                  description: '',
+                                  id: 'param467',
+                                  type: 'string',
+                                  schemaValue: null,
+                                },
+                              ],
+                              description: '',
+                              id: 'param459',
+                              type: 'array',
+                              schemaValue: 'Task',
+                            },
+                            {
+                              name: 'total',
+                              children: null,
+                              description: '',
+                              id: 'param468',
+                              type: 'integer(int64)',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'size',
+                              children: null,
+                              description: '',
+                              id: 'param469',
+                              type: 'integer(int64)',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'current',
+                              children: null,
+                              description: '',
+                              id: 'param470',
+                              type: 'integer(int64)',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'orders',
+                              children: [
+                                {
+                                  name: 'column',
+                                  children: null,
+                                  description: '',
+                                  id: 'param472',
+                                  type: 'string',
+                                  schemaValue: null,
+                                },
+                                {
+                                  name: 'asc',
+                                  children: null,
+                                  description: '',
+                                  id: 'param473',
+                                  type: 'boolean',
+                                  schemaValue: null,
+                                },
+                              ],
+                              description: '',
+                              id: 'param471',
+                              type: 'array',
+                              schemaValue: 'OrderItem',
+                            },
+                            {
+                              name: 'optimizeCountSql',
+                              children: null,
+                              description: '',
+                              id: 'param474',
+                              type: 'PageTask',
+                              schemaValue: 'PageTask',
+                            },
+                            {
+                              name: 'searchCount',
+                              children: null,
+                              description: '',
+                              id: 'param475',
+                              type: 'PageTask',
+                              schemaValue: 'PageTask',
+                            },
+                            {
+                              name: 'optimizeJoinOfCountSql',
+                              children: null,
+                              description: '',
+                              id: 'param476',
+                              type: 'boolean',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'maxLimit',
+                              children: null,
+                              description: '',
+                              id: 'param477',
+                              type: 'integer(int64)',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'countId',
+                              children: null,
+                              description: '',
+                              id: 'param478',
+                              type: 'string',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'pages',
+                              children: null,
+                              description: '',
+                              id: 'param479',
+                              type: 'integer(int64)',
+                              schemaValue: null,
+                            },
+                          ],
+                          description: '',
+                          id: 'param413',
+                          type: 'PageTask',
+                          schemaValue: 'PageTask',
+                        },
+                      ],
+                      responseBasicType: false,
+                      responseText: null,
+                      responseValue:
+                        '{\n\t"code": 0,\n\t"message": "",\n\t"data": {\n\t\t"records": [\n\t\t\t{\n\t\t\t\t"id": 0,\n\t\t\t\t"title": "",\n\t\t\t\t"description": "",\n\t\t\t\t"points": 0,\n\t\t\t\t"status": "",\n\t\t\t\t"creatorId": 0,\n\t\t\t\t"createdAt": "",\n\t\t\t\t"updatedAt": ""\n\t\t\t}\n\t\t],\n\t\t"total": 0,\n\t\t"size": 0,\n\t\t"current": 0,\n\t\t"orders": [\n\t\t\t{\n\t\t\t\t"column": "",\n\t\t\t\t"asc": true\n\t\t\t}\n\t\t],\n\t\t"optimizeCountSql": {},\n\t\t"searchCount": {},\n\t\t"optimizeJoinOfCountSql": true,\n\t\t"maxLimit": 0,\n\t\t"countId": "",\n\t\t"pages": 0\n\t}\n}',
+                    },
+                    {
+                      code: '500',
+                      responseHeaderParameters: null,
+                      data: [
+                        {
+                          name: 'code',
+                          children: null,
+                          description: '',
+                          id: 'param456',
+                          type: 'integer(int32)',
+                          schemaValue: 'integer(int32)',
+                        },
+                        {
+                          name: 'message',
+                          children: null,
+                          description: '',
+                          id: 'param457',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'data',
+                          children: null,
+                          description: '',
+                          id: 'param458',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                      ],
+                      responseBasicType: false,
+                      responseText: null,
+                      responseValue:
+                        '{\n\t"code": 0,\n\t"message": "",\n\t"data": ""\n}',
+                    },
+                  ],
+                  responseHeaderParameters: null,
+                  multipData: {},
+                },
+                {
+                  id: '916c1cd785c7b783317183d14533f6ed',
+                  operationId: 'createTask',
+                  deprecated: false,
+                  summary: '创建任务',
+                  methodType: 'POST',
+                  showUrl: '/api/tasks',
+                  consumes: [
+                    'application/x-www-form-urlencoded',
+                    'application/json',
+                  ],
+                  produces: ['*/*'],
+                  author: null,
+                  description: '<p>管理员创建新任务</p>\n',
+                  requestValue:
+                    '{\n  "title": "",\n  "description": "",\n  "points": 0\n}',
+                  reqParameters: [
+                    {
+                      name: 'createTaskRequest',
+                      children: [
+                        {
+                          name: 'title',
+                          children: null,
+                          description: '',
+                          in: null,
+                          require: true,
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'description',
+                          children: null,
+                          description: '',
+                          in: null,
+                          require: true,
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'points',
+                          children: null,
+                          description: '',
+                          in: null,
+                          require: true,
+                          type: 'integer(int32)',
+                          schemaValue: null,
+                        },
+                      ],
+                      description: 'CreateTaskRequest',
+                      in: 'body',
+                      require: true,
+                      type: 'CreateTaskRequest',
+                      schemaValue: 'CreateTaskRequest',
+                    },
+                  ],
+                  responseCodes: [
+                    { code: '200', description: 'OK', schema: 'ResultTask' },
+                    {
+                      code: '500',
+                      description: 'Internal Server Error',
+                      schema: 'ResultString',
+                    },
+                  ],
+                  multipartResponseSchema: true,
+                  multipCodeDatas: [
+                    {
+                      code: '200',
+                      responseHeaderParameters: null,
+                      data: [
+                        {
+                          name: 'code',
+                          children: null,
+                          description: '',
+                          id: 'param487',
+                          type: 'integer(int32)',
+                          schemaValue: 'integer(int32)',
+                        },
+                        {
+                          name: 'message',
+                          children: null,
+                          description: '',
+                          id: 'param488',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'data',
+                          children: [
+                            {
+                              name: 'id',
+                              children: null,
+                              description: '',
+                              id: 'param512',
+                              type: 'integer(int64)',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'title',
+                              children: null,
+                              description: '',
+                              id: 'param513',
+                              type: 'string',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'description',
+                              children: null,
+                              description: '',
+                              id: 'param514',
+                              type: 'string',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'points',
+                              children: null,
+                              description: '',
+                              id: 'param515',
+                              type: 'integer(int32)',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'status',
+                              children: null,
+                              description: '可用值:OPEN,CLOSED',
+                              id: 'param516',
+                              type: 'string',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'creatorId',
+                              children: null,
+                              description: '',
+                              id: 'param517',
+                              type: 'integer(int64)',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'createdAt',
+                              children: null,
+                              description: '',
+                              id: 'param518',
+                              type: 'string(date-time)',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'updatedAt',
+                              children: null,
+                              description: '',
+                              id: 'param519',
+                              type: 'string(date-time)',
+                              schemaValue: null,
+                            },
+                          ],
+                          description: '',
+                          id: 'param489',
+                          type: 'Task',
+                          schemaValue: 'Task',
+                        },
+                      ],
+                      responseBasicType: false,
+                      responseText: null,
+                      responseValue:
+                        '{\n\t"code": 0,\n\t"message": "",\n\t"data": {\n\t\t"id": 0,\n\t\t"title": "",\n\t\t"description": "",\n\t\t"points": 0,\n\t\t"status": "",\n\t\t"creatorId": 0,\n\t\t"createdAt": "",\n\t\t"updatedAt": ""\n\t}\n}',
+                    },
+                    {
+                      code: '500',
+                      responseHeaderParameters: null,
+                      data: [
+                        {
+                          name: 'code',
+                          children: null,
+                          description: '',
+                          id: 'param506',
+                          type: 'integer(int32)',
+                          schemaValue: 'integer(int32)',
+                        },
+                        {
+                          name: 'message',
+                          children: null,
+                          description: '',
+                          id: 'param507',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'data',
+                          children: null,
+                          description: '',
+                          id: 'param508',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                      ],
+                      responseBasicType: false,
+                      responseText: null,
+                      responseValue:
+                        '{\n\t"code": 0,\n\t"message": "",\n\t"data": ""\n}',
+                    },
+                  ],
+                  responseHeaderParameters: null,
+                  multipData: {},
+                },
+                {
+                  id: '570af933da7fd5b6900703711a16ca5c',
+                  operationId: 'closeTask',
+                  deprecated: false,
+                  summary: '关闭任务',
+                  methodType: 'POST',
+                  showUrl: '/api/tasks/{taskId}/close',
+                  consumes: ['application/x-www-form-urlencoded'],
+                  produces: ['*/*'],
+                  author: null,
+                  description: '<p>管理员关闭任务</p>\n',
+                  requestValue: null,
+                  reqParameters: [
+                    {
+                      name: 'taskId',
+                      children: null,
+                      description: '',
+                      in: 'path',
+                      require: true,
+                      type: 'integer(int64)',
+                      schemaValue: null,
+                    },
+                  ],
+                  responseCodes: [
+                    { code: '200', description: 'OK', schema: 'ResultString' },
+                    {
+                      code: '500',
+                      description: 'Internal Server Error',
+                      schema: 'ResultString',
+                    },
+                  ],
+                  multipartResponseSchema: true,
+                  multipCodeDatas: [
+                    {
+                      code: '200',
+                      responseHeaderParameters: null,
+                      data: [
+                        {
+                          name: 'code',
+                          children: null,
+                          description: '',
+                          id: 'param521',
+                          type: 'integer(int32)',
+                          schemaValue: 'integer(int32)',
+                        },
+                        {
+                          name: 'message',
+                          children: null,
+                          description: '',
+                          id: 'param522',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'data',
+                          children: null,
+                          description: '',
+                          id: 'param523',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                      ],
+                      responseBasicType: false,
+                      responseText: null,
+                      responseValue:
+                        '{\n\t"code": 0,\n\t"message": "",\n\t"data": ""\n}',
+                    },
+                    {
+                      code: '500',
+                      responseHeaderParameters: null,
+                      data: [
+                        {
+                          name: 'code',
+                          children: null,
+                          description: '',
+                          id: 'param524',
+                          type: 'integer(int32)',
+                          schemaValue: 'integer(int32)',
+                        },
+                        {
+                          name: 'message',
+                          children: null,
+                          description: '',
+                          id: 'param525',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'data',
+                          children: null,
+                          description: '',
+                          id: 'param526',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                      ],
+                      responseBasicType: false,
+                      responseText: null,
+                      responseValue:
+                        '{\n\t"code": 0,\n\t"message": "",\n\t"data": ""\n}',
+                    },
+                  ],
+                  responseHeaderParameters: null,
+                  multipData: {},
+                },
+                {
+                  id: 'f34ef0a818ed595d4fbad38c2ac24f9f',
+                  operationId: 'submitTask',
+                  deprecated: false,
+                  summary: '提交任务',
+                  methodType: 'POST',
+                  showUrl: '/api/tasks/submit',
+                  consumes: [
+                    'application/x-www-form-urlencoded',
+                    'application/json',
+                  ],
+                  produces: ['*/*'],
+                  author: null,
+                  description: '<p>用户提交任务内容</p>\n',
+                  requestValue: '{\n  "taskId": 0,\n  "content": ""\n}',
+                  reqParameters: [
+                    {
+                      name: 'submitTaskRequest',
+                      children: [
+                        {
+                          name: 'taskId',
+                          children: null,
+                          description: '',
+                          in: null,
+                          require: true,
+                          type: 'integer(int64)',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'content',
+                          children: null,
+                          description: '',
+                          in: null,
+                          require: true,
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                      ],
+                      description: 'SubmitTaskRequest',
+                      in: 'body',
+                      require: true,
+                      type: 'SubmitTaskRequest',
+                      schemaValue: 'SubmitTaskRequest',
+                    },
+                  ],
+                  responseCodes: [
+                    {
+                      code: '200',
+                      description: 'OK',
+                      schema: 'ResultTaskSubmission',
+                    },
+                    {
+                      code: '500',
+                      description: 'Internal Server Error',
+                      schema: 'ResultString',
+                    },
+                  ],
+                  multipartResponseSchema: true,
+                  multipCodeDatas: [
+                    {
+                      code: '200',
+                      responseHeaderParameters: null,
+                      data: [
+                        {
+                          name: 'code',
+                          children: null,
+                          description: '',
+                          id: 'param540',
+                          type: 'integer(int32)',
+                          schemaValue: 'integer(int32)',
+                        },
+                        {
+                          name: 'message',
+                          children: null,
+                          description: '',
+                          id: 'param541',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'data',
+                          children: [
+                            {
+                              name: 'id',
+                              children: null,
+                              description: '',
+                              id: 'param562',
+                              type: 'integer(int64)',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'taskId',
+                              children: null,
+                              description: '',
+                              id: 'param563',
+                              type: 'integer(int64)',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'userId',
+                              children: null,
+                              description: '',
+                              id: 'param564',
+                              type: 'integer(int64)',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'content',
+                              children: null,
+                              description: '',
+                              id: 'param565',
+                              type: 'string',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'status',
+                              children: null,
+                              description: '可用值:PENDING,APPROVED,REJECTED',
+                              id: 'param566',
+                              type: 'string',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'submittedAt',
+                              children: null,
+                              description: '',
+                              id: 'param567',
+                              type: 'string(date-time)',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'reviewedAt',
+                              children: null,
+                              description: '',
+                              id: 'param568',
+                              type: 'string(date-time)',
+                              schemaValue: null,
+                            },
+                          ],
+                          description: '',
+                          id: 'param542',
+                          type: 'TaskSubmission',
+                          schemaValue: 'TaskSubmission',
+                        },
+                      ],
+                      responseBasicType: false,
+                      responseText: null,
+                      responseValue:
+                        '{\n\t"code": 0,\n\t"message": "",\n\t"data": {\n\t\t"id": 0,\n\t\t"taskId": 0,\n\t\t"userId": 0,\n\t\t"content": "",\n\t\t"status": "",\n\t\t"submittedAt": "",\n\t\t"reviewedAt": ""\n\t}\n}',
+                    },
+                    {
+                      code: '500',
+                      responseHeaderParameters: null,
+                      data: [
+                        {
+                          name: 'code',
+                          children: null,
+                          description: '',
+                          id: 'param557',
+                          type: 'integer(int32)',
+                          schemaValue: 'integer(int32)',
+                        },
+                        {
+                          name: 'message',
+                          children: null,
+                          description: '',
+                          id: 'param558',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'data',
+                          children: null,
+                          description: '',
+                          id: 'param559',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                      ],
+                      responseBasicType: false,
+                      responseText: null,
+                      responseValue:
+                        '{\n\t"code": 0,\n\t"message": "",\n\t"data": ""\n}',
+                    },
+                  ],
+                  responseHeaderParameters: null,
+                  multipData: {},
+                },
+                {
+                  id: '2534db9618d6fd8ae065d1c8d6d7c1c9',
+                  operationId: 'reviewSubmission',
+                  deprecated: false,
+                  summary: '审核提交',
+                  methodType: 'POST',
+                  showUrl: '/api/tasks/review/{submissionId}',
+                  consumes: ['application/x-www-form-urlencoded'],
+                  produces: ['*/*'],
+                  author: null,
+                  description: '<p>管理员审核任务提交</p>\n',
+                  requestValue: null,
+                  reqParameters: [
+                    {
+                      name: 'submissionId',
+                      children: null,
+                      description: '',
+                      in: 'path',
+                      require: true,
+                      type: 'integer(int64)',
+                      schemaValue: null,
+                    },
+                    {
+                      name: 'status',
+                      children: null,
+                      description: '',
+                      in: 'query',
+                      require: true,
+                      type: 'string',
+                      schemaValue: null,
+                    },
+                  ],
+                  responseCodes: [
+                    { code: '200', description: 'OK', schema: 'ResultString' },
+                    {
+                      code: '500',
+                      description: 'Internal Server Error',
+                      schema: 'ResultString',
+                    },
+                  ],
+                  multipartResponseSchema: true,
+                  multipCodeDatas: [
+                    {
+                      code: '200',
+                      responseHeaderParameters: null,
+                      data: [
+                        {
+                          name: 'code',
+                          children: null,
+                          description: '',
+                          id: 'param571',
+                          type: 'integer(int32)',
+                          schemaValue: 'integer(int32)',
+                        },
+                        {
+                          name: 'message',
+                          children: null,
+                          description: '',
+                          id: 'param572',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'data',
+                          children: null,
+                          description: '',
+                          id: 'param573',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                      ],
+                      responseBasicType: false,
+                      responseText: null,
+                      responseValue:
+                        '{\n\t"code": 0,\n\t"message": "",\n\t"data": ""\n}',
+                    },
+                    {
+                      code: '500',
+                      responseHeaderParameters: null,
+                      data: [
+                        {
+                          name: 'code',
+                          children: null,
+                          description: '',
+                          id: 'param574',
+                          type: 'integer(int32)',
+                          schemaValue: 'integer(int32)',
+                        },
+                        {
+                          name: 'message',
+                          children: null,
+                          description: '',
+                          id: 'param575',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'data',
+                          children: null,
+                          description: '',
+                          id: 'param576',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                      ],
+                      responseBasicType: false,
+                      responseText: null,
+                      responseValue:
+                        '{\n\t"code": 0,\n\t"message": "",\n\t"data": ""\n}',
+                    },
+                  ],
+                  responseHeaderParameters: null,
+                  multipData: {},
+                },
+                {
+                  id: '890cad2a15186ff67a0d442c9f27de29',
+                  operationId: 'getTaskById',
+                  deprecated: false,
+                  summary: '获取任务详情',
+                  methodType: 'GET',
+                  showUrl: '/api/tasks/{id}',
+                  consumes: ['application/x-www-form-urlencoded'],
+                  produces: ['*/*'],
+                  author: null,
+                  description: '<p>根据ID获取任务详情</p>\n',
+                  requestValue: null,
+                  reqParameters: [
+                    {
+                      name: 'id',
+                      children: null,
+                      description: '',
+                      in: 'path',
+                      require: true,
+                      type: 'integer(int64)',
+                      schemaValue: null,
+                    },
+                  ],
+                  responseCodes: [
+                    { code: '200', description: 'OK', schema: 'ResultTask' },
+                    {
+                      code: '500',
+                      description: 'Internal Server Error',
+                      schema: 'ResultString',
+                    },
+                  ],
+                  multipartResponseSchema: true,
+                  multipCodeDatas: [
+                    {
+                      code: '200',
+                      responseHeaderParameters: null,
+                      data: [
+                        {
+                          name: 'code',
+                          children: null,
+                          description: '',
+                          id: 'param578',
+                          type: 'integer(int32)',
+                          schemaValue: 'integer(int32)',
+                        },
+                        {
+                          name: 'message',
+                          children: null,
+                          description: '',
+                          id: 'param579',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'data',
+                          children: [
+                            {
+                              name: 'id',
+                              children: null,
+                              description: '',
+                              id: 'param512',
+                              type: 'integer(int64)',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'title',
+                              children: null,
+                              description: '',
+                              id: 'param513',
+                              type: 'string',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'description',
+                              children: null,
+                              description: '',
+                              id: 'param514',
+                              type: 'string',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'points',
+                              children: null,
+                              description: '',
+                              id: 'param515',
+                              type: 'integer(int32)',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'status',
+                              children: null,
+                              description: '可用值:OPEN,CLOSED',
+                              id: 'param516',
+                              type: 'string',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'creatorId',
+                              children: null,
+                              description: '',
+                              id: 'param517',
+                              type: 'integer(int64)',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'createdAt',
+                              children: null,
+                              description: '',
+                              id: 'param518',
+                              type: 'string(date-time)',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'updatedAt',
+                              children: null,
+                              description: '',
+                              id: 'param519',
+                              type: 'string(date-time)',
+                              schemaValue: null,
+                            },
+                          ],
+                          description: '',
+                          id: 'param580',
+                          type: 'Task',
+                          schemaValue: 'Task',
+                        },
+                      ],
+                      responseBasicType: false,
+                      responseText: null,
+                      responseValue:
+                        '{\n\t"code": 0,\n\t"message": "",\n\t"data": {\n\t\t"id": 0,\n\t\t"title": "",\n\t\t"description": "",\n\t\t"points": 0,\n\t\t"status": "",\n\t\t"creatorId": 0,\n\t\t"createdAt": "",\n\t\t"updatedAt": ""\n\t}\n}',
+                    },
+                    {
+                      code: '500',
+                      responseHeaderParameters: null,
+                      data: [
+                        {
+                          name: 'code',
+                          children: null,
+                          description: '',
+                          id: 'param597',
+                          type: 'integer(int32)',
+                          schemaValue: 'integer(int32)',
+                        },
+                        {
+                          name: 'message',
+                          children: null,
+                          description: '',
+                          id: 'param598',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'data',
+                          children: null,
+                          description: '',
+                          id: 'param599',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                      ],
+                      responseBasicType: false,
+                      responseText: null,
+                      responseValue:
+                        '{\n\t"code": 0,\n\t"message": "",\n\t"data": ""\n}',
+                    },
+                  ],
+                  responseHeaderParameters: null,
+                  multipData: {},
+                },
+                {
+                  id: '38f4d1ebcf201bc7ad39fcfc6f3d9a45',
+                  operationId: 'getPendingSubmissions',
+                  deprecated: false,
+                  summary: '获取待审核提交',
+                  methodType: 'GET',
+                  showUrl: '/api/tasks/pending-submissions',
+                  consumes: ['application/x-www-form-urlencoded'],
+                  produces: ['*/*'],
+                  author: null,
+                  description: '<p>管理员获取待审核的提交列表</p>\n',
+                  requestValue: null,
+                  reqParameters: [
+                    {
+                      name: 'page',
+                      children: null,
+                      description: '',
+                      in: 'query',
+                      require: false,
+                      type: 'integer(int32)',
+                      schemaValue: null,
+                    },
+                    {
+                      name: 'size',
+                      children: null,
+                      description: '',
+                      in: 'query',
+                      require: false,
+                      type: 'integer(int32)',
+                      schemaValue: null,
+                    },
+                  ],
+                  responseCodes: [
+                    {
+                      code: '200',
+                      description: 'OK',
+                      schema: 'ResultPageTaskSubmission',
+                    },
+                    {
+                      code: '500',
+                      description: 'Internal Server Error',
+                      schema: 'ResultString',
+                    },
+                  ],
+                  multipartResponseSchema: true,
+                  multipCodeDatas: [
+                    {
+                      code: '200',
+                      responseHeaderParameters: null,
+                      data: [
+                        {
+                          name: 'code',
+                          children: null,
+                          description: '',
+                          id: 'param616',
+                          type: 'integer(int32)',
+                          schemaValue: 'integer(int32)',
+                        },
+                        {
+                          name: 'message',
+                          children: null,
+                          description: '',
+                          id: 'param617',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'data',
+                          children: [
+                            {
+                              name: 'records',
+                              children: [
+                                {
+                                  name: 'id',
+                                  children: null,
+                                  description: '',
+                                  id: 'param663',
+                                  type: 'integer',
+                                  schemaValue: null,
+                                },
+                                {
+                                  name: 'taskId',
+                                  children: null,
+                                  description: '',
+                                  id: 'param664',
+                                  type: 'integer',
+                                  schemaValue: null,
+                                },
+                                {
+                                  name: 'userId',
+                                  children: null,
+                                  description: '',
+                                  id: 'param665',
+                                  type: 'integer',
+                                  schemaValue: null,
+                                },
+                                {
+                                  name: 'content',
+                                  children: null,
+                                  description: '',
+                                  id: 'param666',
+                                  type: 'string',
+                                  schemaValue: null,
+                                },
+                                {
+                                  name: 'status',
+                                  children: null,
+                                  description:
+                                    '可用值:PENDING,APPROVED,REJECTED',
+                                  id: 'param667',
+                                  type: 'string',
+                                  schemaValue: null,
+                                },
+                                {
+                                  name: 'submittedAt',
+                                  children: null,
+                                  description: '',
+                                  id: 'param668',
+                                  type: 'string',
+                                  schemaValue: null,
+                                },
+                                {
+                                  name: 'reviewedAt',
+                                  children: null,
+                                  description: '',
+                                  id: 'param669',
+                                  type: 'string',
+                                  schemaValue: null,
+                                },
+                              ],
+                              description: '',
+                              id: 'param662',
+                              type: 'array',
+                              schemaValue: 'TaskSubmission',
+                            },
+                            {
+                              name: 'total',
+                              children: null,
+                              description: '',
+                              id: 'param670',
+                              type: 'integer(int64)',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'size',
+                              children: null,
+                              description: '',
+                              id: 'param671',
+                              type: 'integer(int64)',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'current',
+                              children: null,
+                              description: '',
+                              id: 'param672',
+                              type: 'integer(int64)',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'orders',
+                              children: [
+                                {
+                                  name: 'column',
+                                  children: null,
+                                  description: '',
+                                  id: 'param674',
+                                  type: 'string',
+                                  schemaValue: null,
+                                },
+                                {
+                                  name: 'asc',
+                                  children: null,
+                                  description: '',
+                                  id: 'param675',
+                                  type: 'boolean',
+                                  schemaValue: null,
+                                },
+                              ],
+                              description: '',
+                              id: 'param673',
+                              type: 'array',
+                              schemaValue: 'OrderItem',
+                            },
+                            {
+                              name: 'optimizeCountSql',
+                              children: null,
+                              description: '',
+                              id: 'param676',
+                              type: 'PageTaskSubmission',
+                              schemaValue: 'PageTaskSubmission',
+                            },
+                            {
+                              name: 'searchCount',
+                              children: null,
+                              description: '',
+                              id: 'param677',
+                              type: 'PageTaskSubmission',
+                              schemaValue: 'PageTaskSubmission',
+                            },
+                            {
+                              name: 'optimizeJoinOfCountSql',
+                              children: null,
+                              description: '',
+                              id: 'param678',
+                              type: 'boolean',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'maxLimit',
+                              children: null,
+                              description: '',
+                              id: 'param679',
+                              type: 'integer(int64)',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'countId',
+                              children: null,
+                              description: '',
+                              id: 'param680',
+                              type: 'string',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'pages',
+                              children: null,
+                              description: '',
+                              id: 'param681',
+                              type: 'integer(int64)',
+                              schemaValue: null,
+                            },
+                          ],
+                          description: '',
+                          id: 'param618',
+                          type: 'PageTaskSubmission',
+                          schemaValue: 'PageTaskSubmission',
+                        },
+                      ],
+                      responseBasicType: false,
+                      responseText: null,
+                      responseValue:
+                        '{\n\t"code": 0,\n\t"message": "",\n\t"data": {\n\t\t"records": [\n\t\t\t{\n\t\t\t\t"id": 0,\n\t\t\t\t"taskId": 0,\n\t\t\t\t"userId": 0,\n\t\t\t\t"content": "",\n\t\t\t\t"status": "",\n\t\t\t\t"submittedAt": "",\n\t\t\t\t"reviewedAt": ""\n\t\t\t}\n\t\t],\n\t\t"total": 0,\n\t\t"size": 0,\n\t\t"current": 0,\n\t\t"orders": [\n\t\t\t{\n\t\t\t\t"column": "",\n\t\t\t\t"asc": true\n\t\t\t}\n\t\t],\n\t\t"optimizeCountSql": {},\n\t\t"searchCount": {},\n\t\t"optimizeJoinOfCountSql": true,\n\t\t"maxLimit": 0,\n\t\t"countId": "",\n\t\t"pages": 0\n\t}\n}',
+                    },
+                    {
+                      code: '500',
+                      responseHeaderParameters: null,
+                      data: [
+                        {
+                          name: 'code',
+                          children: null,
+                          description: '',
+                          id: 'param659',
+                          type: 'integer(int32)',
+                          schemaValue: 'integer(int32)',
+                        },
+                        {
+                          name: 'message',
+                          children: null,
+                          description: '',
+                          id: 'param660',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'data',
+                          children: null,
+                          description: '',
+                          id: 'param661',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                      ],
+                      responseBasicType: false,
+                      responseText: null,
+                      responseValue:
+                        '{\n\t"code": 0,\n\t"message": "",\n\t"data": ""\n}',
+                    },
+                  ],
+                  responseHeaderParameters: null,
+                  multipData: {},
+                },
+                {
+                  id: 'c847be1a5ef745e40eec7712de78a519',
+                  operationId: 'getMySubmissions',
+                  deprecated: false,
+                  summary: '获取我的提交',
+                  methodType: 'GET',
+                  showUrl: '/api/tasks/my-submissions',
+                  consumes: ['application/x-www-form-urlencoded'],
+                  produces: ['*/*'],
+                  author: null,
+                  description: '<p>获取当前用户的任务提交列表</p>\n',
+                  requestValue: null,
+                  reqParameters: [
+                    {
+                      name: 'page',
+                      children: null,
+                      description: '',
+                      in: 'query',
+                      require: false,
+                      type: 'integer(int32)',
+                      schemaValue: null,
+                    },
+                    {
+                      name: 'size',
+                      children: null,
+                      description: '',
+                      in: 'query',
+                      require: false,
+                      type: 'integer(int32)',
+                      schemaValue: null,
+                    },
+                  ],
+                  responseCodes: [
+                    {
+                      code: '200',
+                      description: 'OK',
+                      schema: 'ResultPageTaskSubmission',
+                    },
+                    {
+                      code: '500',
+                      description: 'Internal Server Error',
+                      schema: 'ResultString',
+                    },
+                  ],
+                  multipartResponseSchema: true,
+                  multipCodeDatas: [
+                    {
+                      code: '200',
+                      responseHeaderParameters: null,
+                      data: [
+                        {
+                          name: 'code',
+                          children: null,
+                          description: '',
+                          id: 'param684',
+                          type: 'integer(int32)',
+                          schemaValue: 'integer(int32)',
+                        },
+                        {
+                          name: 'message',
+                          children: null,
+                          description: '',
+                          id: 'param685',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'data',
+                          children: [
+                            {
+                              name: 'records',
+                              children: [
+                                {
+                                  name: 'id',
+                                  children: null,
+                                  description: '',
+                                  id: 'param663',
+                                  type: 'integer',
+                                  schemaValue: null,
+                                },
+                                {
+                                  name: 'taskId',
+                                  children: null,
+                                  description: '',
+                                  id: 'param664',
+                                  type: 'integer',
+                                  schemaValue: null,
+                                },
+                                {
+                                  name: 'userId',
+                                  children: null,
+                                  description: '',
+                                  id: 'param665',
+                                  type: 'integer',
+                                  schemaValue: null,
+                                },
+                                {
+                                  name: 'content',
+                                  children: null,
+                                  description: '',
+                                  id: 'param666',
+                                  type: 'string',
+                                  schemaValue: null,
+                                },
+                                {
+                                  name: 'status',
+                                  children: null,
+                                  description:
+                                    '可用值:PENDING,APPROVED,REJECTED',
+                                  id: 'param667',
+                                  type: 'string',
+                                  schemaValue: null,
+                                },
+                                {
+                                  name: 'submittedAt',
+                                  children: null,
+                                  description: '',
+                                  id: 'param668',
+                                  type: 'string',
+                                  schemaValue: null,
+                                },
+                                {
+                                  name: 'reviewedAt',
+                                  children: null,
+                                  description: '',
+                                  id: 'param669',
+                                  type: 'string',
+                                  schemaValue: null,
+                                },
+                              ],
+                              description: '',
+                              id: 'param662',
+                              type: 'array',
+                              schemaValue: 'TaskSubmission',
+                            },
+                            {
+                              name: 'total',
+                              children: null,
+                              description: '',
+                              id: 'param670',
+                              type: 'integer(int64)',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'size',
+                              children: null,
+                              description: '',
+                              id: 'param671',
+                              type: 'integer(int64)',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'current',
+                              children: null,
+                              description: '',
+                              id: 'param672',
+                              type: 'integer(int64)',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'orders',
+                              children: [
+                                {
+                                  name: 'column',
+                                  children: null,
+                                  description: '',
+                                  id: 'param674',
+                                  type: 'string',
+                                  schemaValue: null,
+                                },
+                                {
+                                  name: 'asc',
+                                  children: null,
+                                  description: '',
+                                  id: 'param675',
+                                  type: 'boolean',
+                                  schemaValue: null,
+                                },
+                              ],
+                              description: '',
+                              id: 'param673',
+                              type: 'array',
+                              schemaValue: 'OrderItem',
+                            },
+                            {
+                              name: 'optimizeCountSql',
+                              children: null,
+                              description: '',
+                              id: 'param676',
+                              type: 'PageTaskSubmission',
+                              schemaValue: 'PageTaskSubmission',
+                            },
+                            {
+                              name: 'searchCount',
+                              children: null,
+                              description: '',
+                              id: 'param677',
+                              type: 'PageTaskSubmission',
+                              schemaValue: 'PageTaskSubmission',
+                            },
+                            {
+                              name: 'optimizeJoinOfCountSql',
+                              children: null,
+                              description: '',
+                              id: 'param678',
+                              type: 'boolean',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'maxLimit',
+                              children: null,
+                              description: '',
+                              id: 'param679',
+                              type: 'integer(int64)',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'countId',
+                              children: null,
+                              description: '',
+                              id: 'param680',
+                              type: 'string',
+                              schemaValue: null,
+                            },
+                            {
+                              name: 'pages',
+                              children: null,
+                              description: '',
+                              id: 'param681',
+                              type: 'integer(int64)',
+                              schemaValue: null,
+                            },
+                          ],
+                          description: '',
+                          id: 'param686',
+                          type: 'PageTaskSubmission',
+                          schemaValue: 'PageTaskSubmission',
+                        },
+                      ],
+                      responseBasicType: false,
+                      responseText: null,
+                      responseValue:
+                        '{\n\t"code": 0,\n\t"message": "",\n\t"data": {\n\t\t"records": [\n\t\t\t{\n\t\t\t\t"id": 0,\n\t\t\t\t"taskId": 0,\n\t\t\t\t"userId": 0,\n\t\t\t\t"content": "",\n\t\t\t\t"status": "",\n\t\t\t\t"submittedAt": "",\n\t\t\t\t"reviewedAt": ""\n\t\t\t}\n\t\t],\n\t\t"total": 0,\n\t\t"size": 0,\n\t\t"current": 0,\n\t\t"orders": [\n\t\t\t{\n\t\t\t\t"column": "",\n\t\t\t\t"asc": true\n\t\t\t}\n\t\t],\n\t\t"optimizeCountSql": {},\n\t\t"searchCount": {},\n\t\t"optimizeJoinOfCountSql": true,\n\t\t"maxLimit": 0,\n\t\t"countId": "",\n\t\t"pages": 0\n\t}\n}',
+                    },
+                    {
+                      code: '500',
+                      responseHeaderParameters: null,
+                      data: [
+                        {
+                          name: 'code',
+                          children: null,
+                          description: '',
+                          id: 'param727',
+                          type: 'integer(int32)',
+                          schemaValue: 'integer(int32)',
+                        },
+                        {
+                          name: 'message',
+                          children: null,
+                          description: '',
+                          id: 'param728',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                        {
+                          name: 'data',
+                          children: null,
+                          description: '',
+                          id: 'param729',
+                          type: 'string',
+                          schemaValue: null,
+                        },
+                      ],
+                      responseBasicType: false,
+                      responseText: null,
+                      responseValue:
+                        '{\n\t"code": 0,\n\t"message": "",\n\t"data": ""\n}',
+                    },
+                  ],
+                  responseHeaderParameters: null,
+                  multipData: {},
+                },
+              ],
+              hasNew: false,
+              hasChanged: true,
+            },
+          ],
+        };
+        //console(datas);
+        return datas;
+      }
+
+      function main() {
+        //当前接口json数据
+        var d = getData();
+        //请求参数table-header
+        const requestcolumns = [
+          {
+            title: '参数名称',
+            dataIndex: 'name',
+            width: '30%',
+          },
+          {
+            title: '参数说明',
+            dataIndex: 'description',
+            width: '25%',
+          },
+          {
+            title: '请求类型',
+            dataIndex: 'in',
+            scopedSlots: { customRender: 'typeTemplate' },
+          },
+          {
+            title: '是否必须',
+            dataIndex: 'require',
+            scopedSlots: { customRender: 'requireTemplate' },
+          },
+          {
+            title: '数据类型',
+            dataIndex: 'type',
+            scopedSlots: { customRender: 'datatypeTemplate' },
+          },
+          {
+            title: 'schema',
+            dataIndex: 'schemaValue',
+            width: '15%',
+          },
+        ];
+        //响应状态table-header
+        const responseStatuscolumns = [
+          {
+            title: '状态码',
+            dataIndex: 'code',
+            width: '20%',
+          },
+          {
+            title: '说明',
+            dataIndex: 'description',
+            width: '55%',
+            scopedSlots: { customRender: 'descriptionTemplate' },
+          },
+          {
+            title: 'schema',
+            dataIndex: 'schema',
+          },
+        ];
+        //响应头-header
+        const responseHeaderColumns = [
+          {
+            title: '参数名称',
+            dataIndex: 'name',
+            width: '30%',
+          },
+          {
+            title: '参数说明',
+            dataIndex: 'description',
+            width: '55%',
+          },
+          {
+            title: '数据类型',
+            dataIndex: 'type',
+          },
+        ];
+        const responseParametersColumns = [
+          {
+            title: '参数名称',
+            dataIndex: 'name',
+            width: '35%',
+          },
+          {
+            title: '参数说明',
+            dataIndex: 'description',
+            width: '40%',
+          },
+          {
+            title: '类型',
+            dataIndex: 'type',
+          },
+          {
+            title: 'schema',
+            dataIndex: 'schemaValue',
+            width: '15%',
+          },
+        ];
+        //dataType组件
+        var dataType = {
+          name: 'DataType',
+          props: {
+            text: {
+              type: String,
+              required: true,
+            },
+            record: {
+              type: Object,
+              required: true,
+            },
+          },
+          data: function () {
+            return {
+              validators: [],
+            };
+          },
+          created() {
+            this.intiValidator();
+          },
+          methods: {
+            intiValidator() {
+              var that = this;
+              const record = this.record;
+              if (record.validateInstance != null) {
+                var len = that.getJsonKeyLength(record.validateInstance);
+                var _size = 0;
+                for (var k in record.validateInstance) {
+                  var str = k + ':' + record.validateInstance[k];
+                  that.validators.push({ key: k, val: str });
+                }
+              }
+            },
+            getJsonKeyLength(json) {
+              var size = 0;
+              if (json != null) {
+                for (var key in json) {
+                  if (json.hasOwnProperty(key)) size++;
+                }
+              }
+              return size;
+            },
+          },
+          template:
+            '<div><span v-if="!record.validateStatus">{{text}}</span><span v-else class="knife4j-request-validate-jsr"><a-tooltip placement="right"><template slot="title"><div v-for="pt in validators" :key="pt.key">{{pt.val}}</div></template>{{text}}</a-tooltip></span></div>',
+        };
+        var data = {
+          tags: d.tags,
+          instance: d.instance,
+          columns: requestcolumns,
+          responseHeaderColumns: responseHeaderColumns,
+          responseStatuscolumns: responseStatuscolumns,
+          responseParametersColumns: responseParametersColumns,
+          expanRows: true,
+          //接收一个响应信息对象,遍历得到树形结构的值
+          multipCode: false,
+          multipCodeDatas: [],
+          multipData: {},
+          page: false,
+          hideShow: true,
+        };
+        new Vue({
+          el: '#knife4jDocument',
+          components: {
+            DataType: dataType,
+          },
+          data() {
+            return data;
+          },
+          mounted() {
+            //初始化完成
+            //赋予点击事件;
+            document
+              .getElementById('btnHide')
+              .addEventListener('click', function () {
+                //隐藏目录
+                var doc = document.getElementById('knife4jDoc');
+                var docGlobal = document.getElementById('knife4j-doc-m');
+                if (doc.style.display == 'none') {
+                  doc.style.display = '';
+                  document.getElementById('btnHide').innerHTML = '隐 藏';
+                  docGlobal.style.width = '400px';
+                  docGlobal.style.height = '500px';
+                } else {
+                  doc.style.display = 'none';
+                  document.getElementById('btnHide').innerHTML = '目 录';
+                  docGlobal.style.width = '52px';
+                  docGlobal.style.height = '35px';
+                }
+              });
+          },
+          created() {},
+          methods: {
+            genUnionTableKey() {
+              var key =
+                'param' +
+                new Date().getTime().toString() +
+                Math.floor(Math.random() * 1000000).toString();
+              return key;
+            },
+            formaterJson(json) {
+              try {
+                if (typeof json != 'string') {
+                  json = JSON.stringify(json, undefined, 2);
+                }
+                json = json
+                  .replace(/&/g, '&')
+                  .replace(/</g, '<')
+                  .replace(/>/g, '>');
+                return json.replace(
+                  /("(\u[a-zA-Z0-9]{4}|\[^u]|[^\"])*"(s*:)?|(true|false|null)|-?d+(?:.d*)?(?:[eE][+-]?d+)?)/g,
+                  function (match) {
+                    var cls = 'number';
+                    if (/^"/.test(match)) {
+                      if (/:$/.test(match)) {
+                        cls = 'key';
+                      } else {
+                        cls = 'string';
+                      }
+                    } else if (/true|false/.test(match)) {
+                      cls = 'boolean';
+                    } else if (/null/.test(match)) {
+                      cls = 'null';
+                    }
+                    return '<span class="' + cls + '">' + match + '</span>';
+                  }
+                );
+              } catch (error) {
+                return json;
+              }
+            },
+          },
+        });
+      }
+
+      main();
+    </script>
+  </body>
+</html>
