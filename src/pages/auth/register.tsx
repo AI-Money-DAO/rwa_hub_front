@@ -18,6 +18,9 @@ export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
+  const [verificationCode, setVerificationCode] = useState('');
+  const [codeSent, setCodeSent] = useState(false);
+  const [countdown, setCountdown] = useState(0);
 
   const { registerUser, isLoading, error, clearError } = useRegister();
   const router = useRouter();
@@ -40,16 +43,62 @@ export default function RegisterPage() {
     ? validatePassword(passwordValue)
     : null;
 
+  // 发送邮箱验证码
+  const sendEmailCode = async () => {
+    const email = watch('email');
+    if (!email) {
+      alert('请先输入邮箱地址');
+      return;
+    }
+
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || 'http://175.27.247.250'}/api/auth/send-email-code?email=${email}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      
+      const result = await response.json();
+      
+      if (result.code === 0) {
+        setCodeSent(true);
+        setCountdown(60);
+        
+        // 开始倒计时
+        const timer = setInterval(() => {
+          setCountdown((prev) => {
+            if (prev <= 1) {
+              clearInterval(timer);
+              return 0;
+            }
+            return prev - 1;
+          });
+        }, 1000);
+      } else {
+        alert(result.message || '发送验证码失败');
+      }
+    } catch (error) {
+      alert('发送验证码失败，请重试');
+    }
+  };
+
   // Handle form submission
   const onSubmit = async (data: RegisterFormData) => {
     const result = await registerUser({
       username: data.username,
       email: data.email,
       password: data.password,
+      confirmPassword: data.confirmPassword,
+      verificationCode: verificationCode,
     });
 
     if (result.success) {
       setRegistrationSuccess(true);
+      // 3秒后自动跳转到登录页面
+      setTimeout(() => {
+        router.push('/auth/login');
+      }, 3000);
     }
   };
 
@@ -94,7 +143,7 @@ export default function RegisterPage() {
               注册成功！
             </h2>
             <p className="mt-2 text-center text-sm text-gray-600">
-              我们已向您的邮箱发送了验证邮件，请查收并完成邮箱验证。
+              注册成功！3秒后将自动跳转到登录页面。
             </p>
             <div className="mt-6">
               <Button
@@ -181,6 +230,39 @@ export default function RegisterPage() {
                 {errors.email && (
                   <p className="mt-1 text-sm text-red-600">
                     {errors.email.message}
+                  </p>
+                )}
+              </div>
+
+              {/* 邮箱验证码输入框 */}
+              <div>
+                <label
+                  htmlFor="verificationCode"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  邮箱验证码
+                </label>
+                <div className="flex space-x-2">
+                  <Input
+                    id="verificationCode"
+                    type="text"
+                    placeholder="请输入验证码"
+                    value={verificationCode}
+                    onChange={(e) => setVerificationCode(e.target.value)}
+                    className="flex-1"
+                  />
+                  <Button
+                    type="button"
+                    onClick={sendEmailCode}
+                    disabled={countdown > 0 || !watch('email')}
+                    className="px-4 py-2 text-sm bg-gray-600 hover:bg-gray-700 text-white"
+                  >
+                    {countdown > 0 ? `${countdown}s` : '发送验证码'}
+                  </Button>
+                </div>
+                {codeSent && (
+                  <p className="mt-1 text-sm text-green-600">
+                    验证码已发送到您的邮箱，请查收
                   </p>
                 )}
               </div>

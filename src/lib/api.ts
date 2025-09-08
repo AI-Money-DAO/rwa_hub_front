@@ -181,10 +181,10 @@ class MockApiClient extends BaseApiClient {
   }
 
   // Auth endpoints
-  async login(credentials: { username: string; password: string }) {
+  async login(data: { loginType: string; identifier: string; password: string; verificationCode?: string; authCode?: string }) {
     return this.post<import('@/types').LoginResponse>(
       '/api/auth/login',
-      credentials
+      data
     );
   }
 
@@ -196,8 +196,12 @@ class MockApiClient extends BaseApiClient {
     return this.post('/api/auth/register', userData);
   }
 
-  async refreshToken() {
+  refreshToken() {
     return this.post('/api/auth/refresh', {}, true);
+  }
+
+  async resetPassword(data: any) {
+    return this.post('/api/profile/reset-password', data);
   }
 
   // Profile endpoints
@@ -262,131 +266,125 @@ class MockApiClient extends BaseApiClient {
     return this.get('/api/points/history', params, true);
   }
 
-  // Chat endpoints
-  async sendMessage(data: { message: string; sessionId?: string }) {
+  // Chat endpoints (如果需要的话)
+  sendMessage(data: { message: string; sessionId?: string }) {
     return this.post('/api/chat/message', data, true);
   }
 
-  async getChatHistory(sessionId: string) {
+  getChatHistory(sessionId: string) {
     return this.get(`/api/chat/history/${sessionId}`, {}, true);
   }
 
-  async getChatSessions() {
+  getChatSessions() {
     return this.get('/api/chat/sessions', {}, true);
   }
 
-  async createChatSession() {
+  createChatSession() {
     return this.post('/api/chat/sessions', {}, true);
   }
 }
 
-// Real API client (to be implemented when backend is ready)
+// Real API client
 class RealApiClient extends BaseApiClient {
   constructor() {
     super(config.apiBaseUrl);
   }
 
-  // Auth endpoints
-  async login(credentials: { username: string; password: string }) {
-    return this.post<import('@/types').LoginResponse>(
-      '/auth/login',
-      credentials
-    );
+  // User Profile Management
+  updateProfile(data: any) {
+    return this.post('/api/profile/update', data, true);
   }
 
-  async register(userData: {
-    username: string;
-    email: string;
-    password: string;
-  }) {
-    return this.post('/auth/register', userData);
+  sendResetCode(email: string) {
+    return this.post(`/api/profile/send-reset-code?email=${email}`, {}, false);
   }
 
-  async refreshToken() {
-    return this.post('/auth/refresh', {}, true);
+  resetPassword(data: any) {
+    return this.post('/api/profile/reset-password', data, false);
   }
 
-  // Profile endpoints
-  async updateProfile(data: any) {
-    return this.put('/profile/update', data, true);
+  changePassword(data: any) {
+    return this.post('/api/profile/change-password', data, true);
   }
 
-  async changePassword(data: { currentPassword: string; newPassword: string }) {
-    return this.post('/profile/change-password', data, true);
+  getPasswordStrength() {
+    return this.get('/api/profile/password-strength', {}, false);
   }
 
-  async requestPasswordReset(email: string) {
-    return this.post('/profile/reset-password', { email });
+  // User Authentication  
+  sendSmsCode(phone: string) {
+    return this.post(`/api/auth/send-sms-code?phone=${phone}`, {}, false);
   }
 
-  async confirmPasswordReset(data: {
-    email: string;
-    verificationCode: string;
-    newPassword: string;
-  }) {
-    return this.put('/profile/reset-password', data);
+  sendEmailCode(email: string) {
+    return this.post(`/api/auth/send-email-code?email=${email}`, {}, false);
   }
 
-  // Task endpoints
-  async getTasks(params?: PaginationParams & { filters?: any }) {
-    return this.get('/tasks', params, true);
+  register(data: any) {
+    return this.post('/api/auth/register', data, false);
   }
 
-  async getTask(id: number) {
-    return this.get(`/tasks/${id}`, {}, true);
+  login(data: { loginType: string; identifier: string; password: string; verificationCode?: string; authCode?: string }) {
+    return this.post<import('@/types').LoginResponse>('/api/auth/login', data, false);
   }
 
-  async createTask(data: {
-    title: string;
-    description: string;
-    points: number;
-  }) {
-    return this.post('/tasks', data, true);
+  githubCallback(code: string) {
+    return this.get(`/api/auth/github/callback?code=${code}`, {}, false);
   }
 
-  async assignTask(id: number) {
-    return this.post(`/tasks/${id}/assign`, {}, true);
+  // Points Management
+  getPointsHistory(params?: PaginationParams) {
+    return this.get('/api/points/history', params, true);
   }
 
-  async submitTask(
-    id: number,
-    data: { submissionContent: string; attachments?: string[] }
-  ) {
-    return this.post(`/tasks/${id}/submit`, data, true);
+  getPointsBalance() {
+    return this.get('/api/points/balance', {}, true);
   }
 
-  async closeTask(id: number) {
-    return this.post(`/tasks/${id}/close`, {}, true);
+  // Task Management
+  getTasks(params?: PaginationParams & { status?: string }) {
+    return this.get('/api/tasks', params, true);
   }
 
-  // Points endpoints
-  async getPointsBalance() {
-    return this.get('/points/balance', {}, true);
+  createTask(data: any) {
+    return this.post('/api/tasks', data, true);
   }
 
-  async getPointsHistory(params?: PaginationParams) {
-    return this.get('/points/history', params, true);
+  getTask(id: number) {
+    return this.get(`/api/tasks/${id}`, {}, true);
   }
 
-  // Chat endpoints
-  async sendMessage(data: { message: string; sessionId?: string }) {
-    return this.post('/chat/message', data, true);
+  closeTask(taskId: number) {
+    return this.post(`/api/tasks/${taskId}/close`, {}, true);
   }
 
-  async getChatHistory(sessionId: string) {
-    return this.get(`/chat/history/${sessionId}`, {}, true);
+  submitTask(data: any) {
+    return this.post('/api/tasks/submit', data, true);
   }
 
-  async getChatSessions() {
-    return this.get('/chat/sessions', {}, true);
+  reviewSubmission(submissionId: number, status: string) {
+    return this.post(`/api/tasks/review/${submissionId}?status=${status}`, {}, true);
   }
 
-  async createChatSession() {
-    return this.post('/chat/sessions', {}, true);
+  getPendingSubmissions(params?: PaginationParams) {
+    return this.get('/api/tasks/pending-submissions', params, true);
+  }
+
+  getMySubmissions(params?: PaginationParams) {
+    return this.get('/api/tasks/my-submissions', params, true);
+  }
+
+  refreshToken() {
+    return Promise.resolve({ code: 0, message: 'Not implemented', data: null });
   }
 }
 
 // Export the appropriate client based on environment
+console.log('API Configuration:', {
+  enableMockApi: config.enableMockApi,
+  apiBaseUrl: config.apiBaseUrl
+});
+
 export const apiClient = config.enableMockApi
   ? new MockApiClient()
   : new RealApiClient();

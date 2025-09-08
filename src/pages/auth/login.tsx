@@ -31,12 +31,19 @@ export default function LoginPage() {
 
   // Handle form submission
   const onSubmit = async (data: LoginFormData) => {
+    console.log('Form submitted with data:', data);
     const result = await loginUser(data);
+    console.log('Login result:', result);
 
     if (result.success) {
+      console.log('Login successful, redirecting...');
       // Redirect to return URL or dashboard
       const returnUrl = router.query.returnUrl as string;
-      router.push(returnUrl || '/dashboard');
+      const targetUrl = returnUrl || '/dashboard';
+      console.log('Redirecting to:', targetUrl);
+      router.push(targetUrl);
+    } else {
+      console.log('Login failed:', result.error);
     }
   };
 

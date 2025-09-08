@@ -1,5 +1,4 @@
 import Head from 'next/head';
-import { AuthStatus } from '@/components/auth/AuthStatus';
 import { AISearchBox } from '@/components/features/AISearchBox';
 import { ServiceCards } from '@/components/features/ServiceCards';
 import { Button } from '@/components/ui/button';
@@ -35,11 +34,6 @@ export default function Home() {
           </div>
 
           <div className="relative container mx-auto px-4 py-20">
-            {/* Auth Status for testing */}
-            <div className="mb-8">
-              <AuthStatus />
-            </div>
-
             <div className="text-center">
               {/* Badge */}
               <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm border border-blue-200 rounded-full px-4 py-2 mb-8">

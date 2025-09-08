@@ -3,7 +3,6 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { RequireAuth } from '@/components/auth/AuthGuard';
 import { useAuth, useIsAdmin } from '@/contexts/AuthContext';
-import { CompactAuthStatus } from '@/components/auth/AuthStatus';
 import { apiClient } from '@/lib/api';
 import { PointBalance, Task, PointTransaction, PaginatedResponse } from '@/types';
 
@@ -101,7 +100,6 @@ export default function DashboardPage() {
                   仪表板
                 </h1>
               </div>
-              <CompactAuthStatus />
             </div>
           </div>
         </header>

@@ -156,12 +156,16 @@ export function AuthProvider({ children }: AuthProviderProps) {
       const token = TokenManager.getToken();
       const user = UserManager.getUser();
 
+      console.log('Checking auth state - token:', !!token, 'user:', !!user);
+
       if (!token || !user) {
+        console.log('No token or user found, logging out');
         dispatch({ type: 'AUTH_LOGOUT' });
         return;
       }
 
       if (TokenManager.isTokenExpired(token)) {
+        console.log('Token expired, clearing auth data');
         AuthUtils.clearAuthData();
         dispatch({
           type: 'AUTH_ERROR',
@@ -170,8 +174,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
         return;
       }
 
+      console.log('Auth state valid, setting user:', user);
       dispatch({ type: 'AUTH_SUCCESS', payload: user });
     } catch (error) {
+      console.error('Error in checkAuthState:', error);
       logErrorWithContext(error, 'Auth state check');
       dispatch({
         type: 'AUTH_ERROR',
@@ -200,6 +206,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       dispatch({ type: 'AUTH_SUCCESS', payload: user });
       AuthEventManager.emit('login');
     } catch (error) {
+      console.error('Error in AuthContext.login:', error);
       logErrorWithContext(error, 'Login process');
       dispatch({ type: 'AUTH_ERROR', payload: 'Failed to process login' });
     }

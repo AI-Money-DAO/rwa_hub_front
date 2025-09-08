@@ -17,12 +17,21 @@ export function useLogin() {
       setIsLoading(true);
       setError(null);
 
-      const response = await apiClient.login(credentials);
+      // 转换为真实API需要的格式
+      const loginData = {
+        loginType: "USERNAME",
+        identifier: credentials.username,
+        password: credentials.password
+      };
 
-      if (response.code === 0) {
+      const response = await apiClient.login(loginData);
+
+      if (response.code === 0 || response.code === 200) {
+        console.log('Login successful, calling AuthContext.login with:', response.data);
         login(response.data);
         return { success: true, data: response.data };
       } else {
+        console.error('Login failed:', response.code, response.message);
         setError(response.message);
         return { success: false, error: response.message };
       }
@@ -56,12 +65,23 @@ export function useRegister() {
     username: string;
     email: string;
     password: string;
+    confirmPassword?: string;
+    verificationCode?: string;
   }) => {
     try {
       setIsLoading(true);
       setError(null);
 
-      const response = await apiClient.register(userData);
+      // 转换为真实API需要的格式
+      const registerData = {
+        username: userData.username,
+        email: userData.email,
+        password: userData.password,
+        confirmPassword: userData.confirmPassword || userData.password,
+        verificationCode: userData.verificationCode || ""
+      };
+
+      const response = await apiClient.register(registerData);
 
       if (response.code === 0) {
         return { success: true, message: response.message };
