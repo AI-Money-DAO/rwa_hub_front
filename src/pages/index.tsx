@@ -11,8 +11,11 @@ import {
   CheckCircle,
 } from 'lucide-react';
 import Link from 'next/link';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function Home() {
+  const { user } = useAuth();
+  
   return (
     <>
       <Head>
@@ -167,52 +170,54 @@ export default function Home() {
           </div>
         </section>
 
-        {/* CTA Section */}
-        <section className="py-20 bg-gradient-to-r from-blue-600 to-purple-600">
-          <div className="container mx-auto px-4">
-            <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-12 max-w-4xl mx-auto text-center">
-              <h3 className="text-3xl md:text-4xl font-bold text-white mb-6">
-                准备开始您的RWA投资之旅？
-              </h3>
-              <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-                立即注册账户，体验专业的RWA投资服务，与全球投资者一起探索RWA的无限可能
-              </p>
+        {/* CTA Section - 只对未登录用户显示 */}
+        {!user && (
+          <section className="py-20 bg-gradient-to-r from-blue-600 to-purple-600">
+            <div className="container mx-auto px-4">
+              <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-12 max-w-4xl mx-auto text-center">
+                <h3 className="text-3xl md:text-4xl font-bold text-white mb-6">
+                  准备开始您的RWA投资之旅？
+                </h3>
+                <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+                  立即注册账户，体验专业的RWA投资服务，与全球投资者一起探索RWA的无限可能
+                </p>
 
-              <div className="flex items-center justify-center gap-4 mb-8">
-                {['专业分析', '安全保障', '7x24服务'].map((feature, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center gap-2 text-blue-100"
+                <div className="flex items-center justify-center gap-4 mb-8">
+                  {['专业分析', '安全保障', '7x24服务'].map((feature, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center gap-2 text-blue-100"
+                    >
+                      <CheckCircle className="w-5 h-5" />
+                      <span>{feature}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <Button
+                    size="lg"
+                    className="bg-white text-blue-600 hover:bg-blue-50 group px-8 py-4 text-lg"
+                    asChild
                   >
-                    <CheckCircle className="w-5 h-5" />
-                    <span>{feature}</span>
-                  </div>
-                ))}
-              </div>
-
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button
-                  size="lg"
-                  className="bg-white text-blue-600 hover:bg-blue-50 group px-8 py-4 text-lg"
-                  asChild
-                >
-                  <Link href="/auth/register">
-                    立即注册
-                    <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-                  </Link>
-                </Button>
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="border-white/30 text-white hover:bg-white/10 px-8 py-4 text-lg"
-                  asChild
-                >
-                  <Link href="/auth/login">已有账户？登录</Link>
-                </Button>
+                    <Link href="/auth/register">
+                      立即注册
+                      <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                    </Link>
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="border-white/30 text-white hover:bg-white/10 px-8 py-4 text-lg"
+                    asChild
+                  >
+                    <Link href="/auth/login">已有账户？登录</Link>
+                  </Button>
+                </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
       </div>
     </>
   );

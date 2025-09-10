@@ -14,6 +14,8 @@ const Layout: React.FC<LayoutProps> = ({ children, showSidebar = false }) => {
 
   // Don't show header/footer on auth pages
   const isAuthPage = router.pathname.startsWith('/auth');
+  // Don't show footer on chat pages
+  const isChatPage = router.pathname.startsWith('/chat');
 
   if (isAuthPage) {
     return <>{children}</>;
@@ -35,7 +37,7 @@ const Layout: React.FC<LayoutProps> = ({ children, showSidebar = false }) => {
         </main>
       </div>
 
-      <Footer />
+      {!isChatPage && <Footer />}
     </div>
   );
 };

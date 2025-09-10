@@ -3,6 +3,9 @@ import { useRouter } from 'next/router';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Send, MessageCircle, Sparkles } from 'lucide-react';
+import { ChatSessionManager } from '@/lib/coze-api';
+import { useAuth } from '@/contexts/AuthContext';
+import LoginPromptModal from '@/components/auth/LoginPromptModal';
 
 interface AISearchBoxProps {
   placeholder?: string;
@@ -15,35 +18,39 @@ export function AISearchBox({
 }: AISearchBoxProps) {
   const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false);
+  const [pendingMessage, setPendingMessage] = useState('');
   const router = useRouter();
+  const { user } = useAuth();
+  const [chatSession] = useState(() => new ChatSessionManager());
 
   const handleSend = async () => {
     if (!message.trim() || isLoading) return;
 
-    setIsLoading(true);
+    const userMessage = message.trim();
 
-    try {
-      // Send message to AI and get response
-      const response = await fetch('/api/chat/message', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ message: message.trim() }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        if (data.code === 0 && data.data?.sessionId) {
-          // Redirect to chat page with the session ID
-          router.push(`/chat/${data.data.sessionId}`);
-        }
-      }
-    } catch (error) {
-      console.error('Failed to send message:', error);
-    } finally {
-      setIsLoading(false);
+    // 检查登录状态
+    if (!user) {
+      // 未登录，显示登录提示弹窗
+      setPendingMessage(userMessage);
+      setShowLoginPrompt(true);
+      return;
     }
+
+    setMessage(''); // 清空输入框
+    
+    // 立即跳转到聊天页面，并传递用户消息
+    sessionStorage.setItem('pendingMessage', JSON.stringify({
+      message: userMessage,
+      timestamp: Date.now()
+    }));
+    
+    router.push('/chat');
+  };
+
+  const handleLoginPromptClose = () => {
+    setShowLoginPrompt(false);
+    setPendingMessage('');
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -96,7 +103,14 @@ export function AISearchBox({
             (suggestion) => (
               <button
                 key={suggestion}
-                onClick={() => setMessage(suggestion)}
+                onClick={() => {
+                  if (!user) {
+                    setPendingMessage(suggestion);
+                    setShowLoginPrompt(true);
+                    return;
+                  }
+                  setMessage(suggestion);
+                }}
                 className="px-3 py-1.5 text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-full transition-colors"
               >
                 {suggestion}
@@ -105,6 +119,14 @@ export function AISearchBox({
           )}
         </div>
       </div>
+
+      {/* 登录提示弹窗 */}
+      <LoginPromptModal
+        isOpen={showLoginPrompt}
+        onClose={handleLoginPromptClose}
+        redirectPath="/chat"
+        message={pendingMessage}
+      />
     </div>
   );
 }

@@ -4,6 +4,8 @@ import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { Layout } from '@/components/layout';
+import AIChatWidget from '@/components/features/AIChatWidget';
+import { ClickToComponent } from 'click-to-react-component';
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
@@ -30,6 +32,15 @@ export default function App({ Component, pageProps }: AppProps) {
         <Layout showSidebar={showSidebar}>
           <Component {...pageProps} />
         </Layout>
+        {/* AI聊天小部件 - 全局可用 */}
+        {!isAuthPage && <AIChatWidget />}
+        {/* Click to Component 开发工具 - 仅在开发环境启用 */}
+        {process.env.NODE_ENV === 'development' && (
+          <ClickToComponent 
+            editor="windsurf"
+            pathModifier={(path: string) => path.replace(/\\/g, '/')}
+          />
+        )}
       </AuthProvider>
     </>
   );
