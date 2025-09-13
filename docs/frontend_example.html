@@ -131,7 +131,7 @@
             <h2>📋 API 配置</h2>
             <div class="form-group">
                 <label for="apiUrl">API 基础地址:</label>
-                <input type="text" id="apiUrl" value="http://175.27.247.250:2026/api/v1" placeholder="http://175.27.247.250:2026/api/v1">
+                <input type="text" id="apiUrl" value="http://127.0.0.1:2026/api/v1" placeholder="http://127.0.0.1:2026/api/v1">
             </div>
 
             <div class="form-group">
@@ -175,7 +175,7 @@
             <h2>📝 JavaScript 调用示例</h2>
             <h3>1. 普通聊天请求</h3>
             <div class="code-block">
-fetch('http://175.27.247.250:8000/api/v1/chat', {
+fetch('http://127.0.0.1:8000/api/v1/chat', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json'
@@ -196,7 +196,7 @@ fetch('http://175.27.247.250:8000/api/v1/chat', {
 
             <h3>2. 流式聊天请求</h3>
             <div class="code-block">
-fetch('http://175.27.247.250:8000/api/v1/chat', {
+fetch('http://127.0.0.1:8000/api/v1/chat', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json'

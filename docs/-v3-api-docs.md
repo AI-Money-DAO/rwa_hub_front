@@ -4,7 +4,7 @@
 **简介**:OpenAPI definition
 
 
-**HOST**:http://175.27.247.250
+**HOST**:http://127.0.0.1
 
 
 **联系人**:

@@ -52,7 +52,7 @@ export default function RegisterPage() {
     }
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || 'http://175.27.247.250'}/api/auth/send-email-code?email=${email}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || 'http://127.0.0.1'}/api/auth/send-email-code?email=${email}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
