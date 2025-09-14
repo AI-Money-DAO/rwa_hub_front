@@ -78,7 +78,7 @@ export default function handler(
     // Verify current password (in mock, we'll assume all passwords are correct for demo)
     // In real app, verify against stored hash
     const user = mockUsers[userIndex];
-    
+
     // For mock purposes, we'll simulate password verification
     // In real app: if (!verifyPassword(currentPassword, user.passwordHash))
     if (currentPassword.length < 6) {

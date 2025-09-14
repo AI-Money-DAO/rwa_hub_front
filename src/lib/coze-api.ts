@@ -178,7 +178,10 @@ export class ChatSessionManager {
   }
 
   // 发送消息
-  async sendMessage(content: string, userId: string = '213'): Promise<ChatResponse> {
+  async sendMessage(
+    content: string,
+    userId: string = '213'
+  ): Promise<ChatResponse> {
     const userMessage: ChatMessage = {
       role: 'user',
       content,

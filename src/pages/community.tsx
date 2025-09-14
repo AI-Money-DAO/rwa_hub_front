@@ -1,6 +1,13 @@
 import React from 'react';
 import Head from 'next/head';
-import { MessageCircle, Users, Star, TrendingUp, Calendar, Award } from 'lucide-react';
+import {
+  MessageCircle,
+  Users,
+  Star,
+  TrendingUp,
+  Calendar,
+  Award,
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export default function CommunityPage() {
@@ -36,15 +43,23 @@ export default function CommunityPage() {
               </h1>
 
               <p className="text-xl md:text-2xl text-blue-100 mb-12 max-w-3xl mx-auto leading-relaxed">
-                加入RWA Hub社区，与来自全球的RWA投资专家、分析师和爱好者交流经验，
+                加入RWA
+                Hub社区，与来自全球的RWA投资专家、分析师和爱好者交流经验，
                 分享投资心得，共同探索RWA投资的无限可能
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button size="lg" className="bg-white text-blue-600 hover:bg-blue-50">
+                <Button
+                  size="lg"
+                  className="bg-white text-blue-600 hover:bg-blue-50"
+                >
                   立即加入社区
                 </Button>
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="border-white text-white hover:bg-white/10"
+                >
                   浏览社区内容
                 </Button>
               </div>
@@ -57,19 +72,27 @@ export default function CommunityPage() {
           <div className="container mx-auto px-4">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
               <div className="text-center">
-                <div className="text-3xl md:text-4xl font-bold text-blue-600 mb-2">10K+</div>
+                <div className="text-3xl md:text-4xl font-bold text-blue-600 mb-2">
+                  10K+
+                </div>
                 <div className="text-gray-600">活跃用户</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl md:text-4xl font-bold text-green-600 mb-2">500+</div>
+                <div className="text-3xl md:text-4xl font-bold text-green-600 mb-2">
+                  500+
+                </div>
                 <div className="text-gray-600">专业投资者</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl md:text-4xl font-bold text-purple-600 mb-2">2K+</div>
+                <div className="text-3xl md:text-4xl font-bold text-purple-600 mb-2">
+                  2K+
+                </div>
                 <div className="text-gray-600">每日讨论</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl md:text-4xl font-bold text-orange-600 mb-2">50+</div>
+                <div className="text-3xl md:text-4xl font-bold text-orange-600 mb-2">
+                  50+
+                </div>
                 <div className="text-gray-600">RWA项目</div>
               </div>
             </div>
@@ -94,7 +117,9 @@ export default function CommunityPage() {
                 <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-6">
                   <MessageCircle className="w-6 h-6 text-blue-600" />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">实时讨论</h3>
+                <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                  实时讨论
+                </h3>
                 <p className="text-gray-600 mb-6">
                   与社区成员实时交流RWA市场动态、投资策略和项目分析
                 </p>
@@ -108,7 +133,9 @@ export default function CommunityPage() {
                 <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mb-6">
                   <TrendingUp className="w-6 h-6 text-green-600" />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">市场分析</h3>
+                <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                  市场分析
+                </h3>
                 <p className="text-gray-600 mb-6">
                   专业分析师分享深度市场分析报告和投资机会洞察
                 </p>
@@ -122,7 +149,9 @@ export default function CommunityPage() {
                 <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mb-6">
                   <Users className="w-6 h-6 text-purple-600" />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">专家问答</h3>
+                <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                  专家问答
+                </h3>
                 <p className="text-gray-600 mb-6">
                   向RWA领域专家提问，获得专业的投资建议和指导
                 </p>
@@ -136,7 +165,9 @@ export default function CommunityPage() {
                 <div className="w-12 h-12 bg-yellow-100 rounded-xl flex items-center justify-center mb-6">
                   <Star className="w-6 h-6 text-yellow-600" />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">项目评级</h3>
+                <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                  项目评级
+                </h3>
                 <p className="text-gray-600 mb-6">
                   社区成员共同评价RWA项目，分享投资经验和风险提示
                 </p>
@@ -150,7 +181,9 @@ export default function CommunityPage() {
                 <div className="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center mb-6">
                   <Calendar className="w-6 h-6 text-indigo-600" />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">活动日历</h3>
+                <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                  活动日历
+                </h3>
                 <p className="text-gray-600 mb-6">
                   参加线上线下活动，包括投资分享会、项目路演等
                 </p>
@@ -164,7 +197,9 @@ export default function CommunityPage() {
                 <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center mb-6">
                   <Award className="w-6 h-6 text-orange-600" />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">成就系统</h3>
+                <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                  成就系统
+                </h3>
                 <p className="text-gray-600 mb-6">
                   通过参与社区活动获得成就徽章和积分奖励
                 </p>
@@ -263,9 +298,7 @@ export default function CommunityPage() {
             </div>
 
             <div className="text-center mt-12">
-              <Button size="lg">
-                查看更多讨论
-              </Button>
+              <Button size="lg">查看更多讨论</Button>
             </div>
           </div>
         </section>
@@ -280,10 +313,17 @@ export default function CommunityPage() {
               立即注册成为RWA Hub社区成员，开启您的专业RWA投资之旅
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="bg-white text-blue-600 hover:bg-blue-50">
+              <Button
+                size="lg"
+                className="bg-white text-blue-600 hover:bg-blue-50"
+              >
                 免费注册
               </Button>
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
+              <Button
+                size="lg"
+                variant="outline"
+                className="border-white text-white hover:bg-white/10"
+              >
                 了解更多
               </Button>
             </div>

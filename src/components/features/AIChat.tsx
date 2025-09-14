@@ -9,10 +9,10 @@ interface AIChatProps {
   onToggleMinimize?: () => void;
 }
 
-export const AIChat: React.FC<AIChatProps> = ({ 
-  className = '', 
-  isMinimized = false, 
-  onToggleMinimize 
+export const AIChat: React.FC<AIChatProps> = ({
+  className = '',
+  isMinimized = false,
+  onToggleMinimize,
 }) => {
   const { user } = useAuth();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -48,12 +48,12 @@ export const AIChat: React.FC<AIChatProps> = ({
       role: 'user',
       content: userMessage,
     };
-    setMessages(prev => [...prev, newUserMessage]);
+    setMessages((prev) => [...prev, newUserMessage]);
 
     try {
       const userId = user?.id?.toString() || '213';
       let accumulatedContent = ''; // 用于累积流式内容
-      
+
       await chatSession.sendStreamMessage(
         userMessage,
         (data: StreamData) => {
@@ -63,33 +63,42 @@ export const AIChat: React.FC<AIChatProps> = ({
           } else if (data.type === 'chat_completed') {
             // 流式响应完成，添加完整的助手回复
             const finalContent = accumulatedContent || data.content || '';
-            setMessages(prev => [...prev, {
-              role: 'assistant',
-              content: finalContent,
-            }]);
+            setMessages((prev) => [
+              ...prev,
+              {
+                role: 'assistant',
+                content: finalContent,
+              },
+            ]);
             setStreamingContent('');
             setIsStreaming(false);
           } else if (data.type === 'error') {
             console.error('Stream error:', data.error);
-            setMessages(prev => [...prev, {
-              role: 'assistant',
-              content: '抱歉，发生了错误，请稍后重试。',
-            }]);
+            setMessages((prev) => [
+              ...prev,
+              {
+                role: 'assistant',
+                content: '抱歉，发生了错误，请稍后重试。',
+              },
+            ]);
             setStreamingContent('');
             setIsStreaming(false);
           } else if (data.type === 'end') {
             // 如果是 end 事件且还有累积内容，也要保存到消息历史
             if (accumulatedContent && !isStreaming) {
-              setMessages(prev => {
+              setMessages((prev) => {
                 // 检查最后一条消息是否已经是助手回复
                 const lastMessage = prev[prev.length - 1];
                 if (lastMessage && lastMessage.role === 'assistant') {
                   return prev; // 已经添加过了，不重复添加
                 }
-                return [...prev, {
-                  role: 'assistant',
-                  content: accumulatedContent,
-                }];
+                return [
+                  ...prev,
+                  {
+                    role: 'assistant',
+                    content: accumulatedContent,
+                  },
+                ];
               });
             }
             setStreamingContent('');
@@ -100,10 +109,13 @@ export const AIChat: React.FC<AIChatProps> = ({
       );
     } catch (error) {
       console.error('Send message error:', error);
-      setMessages(prev => [...prev, {
-        role: 'assistant',
-        content: '网络连接出现问题，请检查网络后重试。',
-      }]);
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: 'assistant',
+          content: '网络连接出现问题，请检查网络后重试。',
+        },
+      ]);
       setStreamingContent('');
       setIsStreaming(false);
     } finally {
@@ -141,7 +153,9 @@ export const AIChat: React.FC<AIChatProps> = ({
   }
 
   return (
-    <div className={`bg-white rounded-lg shadow-xl border border-gray-200 ${className}`}>
+    <div
+      className={`bg-white rounded-lg shadow-xl border border-gray-200 ${className}`}
+    >
       {/* 聊天头部 */}
       <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-t-lg">
         <div className="flex items-center space-x-2">
@@ -228,7 +242,9 @@ export const AIChat: React.FC<AIChatProps> = ({
                 <p className="whitespace-pre-wrap">{streamingContent}</p>
                 <div className="flex items-center mt-1">
                   <Loader2 className="w-3 h-3 animate-spin text-gray-400" />
-                  <span className="text-xs text-gray-400 ml-1">正在输入...</span>
+                  <span className="text-xs text-gray-400 ml-1">
+                    正在输入...
+                  </span>
                 </div>
               </div>
             </div>

@@ -26,7 +26,7 @@ export const AIChatWidget: React.FC = () => {
         isMinimized={isMinimized}
         onToggleMinimize={handleToggleMinimize}
       />
-      
+
       {/* 登录提示弹窗 */}
       <LoginPromptModal
         isOpen={showLoginPrompt}

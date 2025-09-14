@@ -99,9 +99,7 @@ export default function LoginPage() {
                   placeholder="用户名"
                   {...register('username')}
                   className={`h-12 border-gray-200 focus:border-black ${
-                    errors.username
-                      ? 'border-red-500 focus:border-red-500'
-                      : ''
+                    errors.username ? 'border-red-500 focus:border-red-500' : ''
                   }`}
                 />
                 {errors.username && (

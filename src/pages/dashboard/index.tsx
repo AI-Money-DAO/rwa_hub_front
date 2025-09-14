@@ -4,7 +4,12 @@ import Link from 'next/link';
 import { RequireAuth } from '@/components/auth/AuthGuard';
 import { useAuth, useIsAdmin } from '@/contexts/AuthContext';
 import { apiClient } from '@/lib/api';
-import { PointBalance, Task, PointTransaction, PaginatedResponse } from '@/types';
+import {
+  PointBalance,
+  Task,
+  PointTransaction,
+  PaginatedResponse,
+} from '@/types';
 
 interface DashboardStats {
   pointBalance: PointBalance | null;
@@ -24,7 +29,7 @@ export default function DashboardPage() {
     pointBalance: null,
     recentTasks: [],
     recentTransactions: [],
-    taskCounts: { available: 0, assigned: 0, completed: 0 }
+    taskCounts: { available: 0, assigned: 0, completed: 0 },
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -37,9 +42,12 @@ export default function DashboardPage() {
 
         // Fetch point balance
         const pointBalanceResponse = await apiClient.getPointsBalance();
-        
+
         // Fetch recent point transactions (last 5)
-        const transactionsResponse = await apiClient.getPointsHistory({ page: 1, limit: 5 });
+        const transactionsResponse = await apiClient.getPointsHistory({
+          page: 1,
+          limit: 5,
+        });
 
         // Fetch tasks for statistics
         const tasksResponse = await apiClient.getTasks({ page: 1, limit: 50 });
@@ -48,24 +56,36 @@ export default function DashboardPage() {
 
         // Calculate task counts
         const taskCounts = {
-          available: allTasks.filter((task: Task) => task.status === 'AVAILABLE').length,
-          assigned: allTasks.filter((task: Task) => task.status === 'ASSIGNED' && task.assignedUserId === user?.id).length,
-          completed: allTasks.filter((task: Task) => task.status === 'COMPLETED' && task.assignedUserId === user?.id).length,
+          available: allTasks.filter(
+            (task: Task) => task.status === 'AVAILABLE'
+          ).length,
+          assigned: allTasks.filter(
+            (task: Task) =>
+              task.status === 'ASSIGNED' && task.assignedUserId === user?.id
+          ).length,
+          completed: allTasks.filter(
+            (task: Task) =>
+              task.status === 'COMPLETED' && task.assignedUserId === user?.id
+          ).length,
         };
 
         // Get recent tasks (available tasks)
         const recentTasks = allTasks
           .filter((task: Task) => task.status === 'AVAILABLE')
-          .sort((a: Task, b: Task) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+          .sort(
+            (a: Task, b: Task) =>
+              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          )
           .slice(0, 3);
 
-        const transactionsData = transactionsResponse.data as PaginatedResponse<PointTransaction>;
+        const transactionsData =
+          transactionsResponse.data as PaginatedResponse<PointTransaction>;
 
         setStats({
           pointBalance: pointBalanceResponse.data as PointBalance,
           recentTasks,
           recentTransactions: transactionsData.items,
-          taskCounts
+          taskCounts,
         });
       } catch (err) {
         console.error('Failed to fetch dashboard data:', err);
@@ -131,8 +151,16 @@ export default function DashboardPage() {
             {error && (
               <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
                 <div className="flex">
-                  <svg className="w-5 h-5 text-red-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                  <svg
+                    className="w-5 h-5 text-red-400 mr-2"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                      clipRule="evenodd"
+                    />
                   </svg>
                   <p className="text-red-700">{error}</p>
                 </div>
@@ -289,7 +317,10 @@ export default function DashboardPage() {
                       快速操作
                     </h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <Link href="/dashboard/tasks" className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors text-left block">
+                      <Link
+                        href="/dashboard/tasks"
+                        className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors text-left block"
+                      >
                         <div className="flex items-center">
                           <svg
                             className="w-6 h-6 text-blue-600 mr-3"
@@ -308,10 +339,15 @@ export default function DashboardPage() {
                             查看任务
                           </span>
                         </div>
-                        <p className="text-sm text-gray-500 mt-1">浏览可用任务</p>
+                        <p className="text-sm text-gray-500 mt-1">
+                          浏览可用任务
+                        </p>
                       </Link>
 
-                      <Link href="/dashboard/points/history" className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors text-left block">
+                      <Link
+                        href="/dashboard/points/history"
+                        className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors text-left block"
+                      >
                         <div className="flex items-center">
                           <svg
                             className="w-6 h-6 text-green-600 mr-3"
@@ -330,10 +366,15 @@ export default function DashboardPage() {
                             积分历史
                           </span>
                         </div>
-                        <p className="text-sm text-gray-500 mt-1">查看积分记录</p>
+                        <p className="text-sm text-gray-500 mt-1">
+                          查看积分记录
+                        </p>
                       </Link>
 
-                      <Link href="/" className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors text-left block">
+                      <Link
+                        href="/"
+                        className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors text-left block"
+                      >
                         <div className="flex items-center">
                           <svg
                             className="w-6 h-6 text-purple-600 mr-3"
@@ -348,12 +389,19 @@ export default function DashboardPage() {
                               d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
                             />
                           </svg>
-                          <span className="font-medium text-gray-900">AI对话</span>
+                          <span className="font-medium text-gray-900">
+                            AI对话
+                          </span>
                         </div>
-                        <p className="text-sm text-gray-500 mt-1">与AI助手聊天</p>
+                        <p className="text-sm text-gray-500 mt-1">
+                          与AI助手聊天
+                        </p>
                       </Link>
 
-                      <Link href="/dashboard/profile" className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors text-left block">
+                      <Link
+                        href="/dashboard/profile"
+                        className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors text-left block"
+                      >
                         <div className="flex items-center">
                           <svg
                             className="w-6 h-6 text-orange-600 mr-3"
@@ -372,7 +420,9 @@ export default function DashboardPage() {
                             个人资料
                           </span>
                         </div>
-                        <p className="text-sm text-gray-500 mt-1">编辑个人信息</p>
+                        <p className="text-sm text-gray-500 mt-1">
+                          编辑个人信息
+                        </p>
                       </Link>
                     </div>
                   </div>
@@ -387,29 +437,47 @@ export default function DashboardPage() {
                     {stats.recentTransactions.length > 0 ? (
                       <div className="space-y-3">
                         {stats.recentTransactions.map((transaction) => (
-                          <div key={transaction.id} className="flex items-center justify-between py-2 border-b border-gray-100 last:border-b-0">
+                          <div
+                            key={transaction.id}
+                            className="flex items-center justify-between py-2 border-b border-gray-100 last:border-b-0"
+                          >
                             <div className="flex items-center">
-                              <div className={`w-2 h-2 rounded-full mr-3 ${
-                                transaction.type === 'TASK_REWARD' ? 'bg-green-400' :
-                                transaction.type === 'REDEMPTION' ? 'bg-red-400' : 'bg-blue-400'
-                              }`}></div>
+                              <div
+                                className={`w-2 h-2 rounded-full mr-3 ${
+                                  transaction.type === 'TASK_REWARD'
+                                    ? 'bg-green-400'
+                                    : transaction.type === 'REDEMPTION'
+                                      ? 'bg-red-400'
+                                      : 'bg-blue-400'
+                                }`}
+                              ></div>
                               <div>
                                 <p className="text-sm font-medium text-gray-900">
                                   {transaction.description}
                                 </p>
                                 <p className="text-xs text-gray-500">
-                                  {new Date(transaction.createdAt).toLocaleDateString('zh-CN')}
+                                  {new Date(
+                                    transaction.createdAt
+                                  ).toLocaleDateString('zh-CN')}
                                 </p>
                               </div>
                             </div>
-                            <span className={`text-sm font-medium ${
-                              transaction.amount > 0 ? 'text-green-600' : 'text-red-600'
-                            }`}>
-                              {transaction.amount > 0 ? '+' : ''}{transaction.amount}
+                            <span
+                              className={`text-sm font-medium ${
+                                transaction.amount > 0
+                                  ? 'text-green-600'
+                                  : 'text-red-600'
+                              }`}
+                            >
+                              {transaction.amount > 0 ? '+' : ''}
+                              {transaction.amount}
                             </span>
                           </div>
                         ))}
-                        <Link href="/dashboard/points/history" className="text-sm text-blue-600 hover:text-blue-800 font-medium">
+                        <Link
+                          href="/dashboard/points/history"
+                          className="text-sm text-blue-600 hover:text-blue-800 font-medium"
+                        >
                           查看全部积分历史 →
                         </Link>
                       </div>
@@ -430,14 +498,24 @@ export default function DashboardPage() {
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     {stats.recentTasks.map((task) => (
-                      <div key={task.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-                        <h4 className="font-medium text-gray-900 mb-2">{task.title}</h4>
-                        <p className="text-sm text-gray-600 mb-3 line-clamp-2">{task.description}</p>
+                      <div
+                        key={task.id}
+                        className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
+                      >
+                        <h4 className="font-medium text-gray-900 mb-2">
+                          {task.title}
+                        </h4>
+                        <p className="text-sm text-gray-600 mb-3 line-clamp-2">
+                          {task.description}
+                        </p>
                         <div className="flex items-center justify-between">
                           <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                             {task.reward} 积分
                           </span>
-                          <Link href={`/dashboard/tasks/${task.id}`} className="text-sm text-blue-600 hover:text-blue-800 font-medium">
+                          <Link
+                            href={`/dashboard/tasks/${task.id}`}
+                            className="text-sm text-blue-600 hover:text-blue-800 font-medium"
+                          >
                             查看详情
                           </Link>
                         </div>
@@ -445,7 +523,10 @@ export default function DashboardPage() {
                     ))}
                   </div>
                   <div className="mt-4">
-                    <Link href="/dashboard/tasks" className="text-sm text-blue-600 hover:text-blue-800 font-medium">
+                    <Link
+                      href="/dashboard/tasks"
+                      className="text-sm text-blue-600 hover:text-blue-800 font-medium"
+                    >
                       查看所有任务 →
                     </Link>
                   </div>
@@ -464,13 +545,22 @@ export default function DashboardPage() {
                     您拥有管理员权限，可以访问以下功能：
                   </p>
                   <div className="flex flex-wrap gap-4">
-                    <Link href="/dashboard/tasks/create" className="px-4 py-2 bg-yellow-600 text-white rounded hover:bg-yellow-700 transition-colors">
+                    <Link
+                      href="/dashboard/tasks/create"
+                      className="px-4 py-2 bg-yellow-600 text-white rounded hover:bg-yellow-700 transition-colors"
+                    >
                       创建任务
                     </Link>
-                    <Link href="/dashboard/admin/users" className="px-4 py-2 bg-yellow-600 text-white rounded hover:bg-yellow-700 transition-colors">
+                    <Link
+                      href="/dashboard/admin/users"
+                      className="px-4 py-2 bg-yellow-600 text-white rounded hover:bg-yellow-700 transition-colors"
+                    >
                       用户管理
                     </Link>
-                    <Link href="/dashboard/admin/tasks" className="px-4 py-2 bg-yellow-600 text-white rounded hover:bg-yellow-700 transition-colors">
+                    <Link
+                      href="/dashboard/admin/tasks"
+                      className="px-4 py-2 bg-yellow-600 text-white rounded hover:bg-yellow-700 transition-colors"
+                    >
                       任务管理
                     </Link>
                   </div>

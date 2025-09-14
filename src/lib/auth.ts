@@ -137,7 +137,7 @@ export class AuthUtils {
     const { token, ...userData } = loginResponse;
 
     TokenManager.setToken(token);
-    
+
     UserManager.setUser({
       id: userData.userId,
       username: userData.username,

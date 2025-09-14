@@ -1,6 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
-import { ArrowLeft, MessageSquare, Settings, MoreVertical, User, Send, Loader2 } from 'lucide-react';
+import {
+  ArrowLeft,
+  MessageSquare,
+  Settings,
+  MoreVertical,
+  User,
+  Send,
+  Loader2,
+} from 'lucide-react';
 import AIChat from '@/components/features/AIChat';
 import { ChatSessionManager, ChatMessage, StreamData } from '@/lib/coze-api';
 import { useAuth } from '@/contexts/AuthContext';
@@ -8,7 +16,9 @@ import { useAuth } from '@/contexts/AuthContext';
 export default function ChatPage() {
   const router = useRouter();
   const { user } = useAuth();
-  const [chatSession, setChatSession] = useState<ChatSessionManager | null>(null);
+  const [chatSession, setChatSession] = useState<ChatSessionManager | null>(
+    null
+  );
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -21,19 +31,19 @@ export default function ChatPage() {
     // 从 sessionStorage 恢复聊天会话
     const savedSession = sessionStorage.getItem('chatSession');
     const pendingMessage = sessionStorage.getItem('pendingMessage');
-    
+
     if (savedSession) {
       try {
         const sessionData = JSON.parse(savedSession);
         const newChatSession = new ChatSessionManager();
-        
+
         // 如果有会话ID，设置到会话管理器中
         if (sessionData.conversationId) {
           newChatSession.setConversationId(sessionData.conversationId);
         }
-        
+
         setChatSession(newChatSession);
-        
+
         // 清理 sessionStorage
         sessionStorage.removeItem('chatSession');
       } catch (error) {
@@ -43,7 +53,7 @@ export default function ChatPage() {
     } else {
       setChatSession(new ChatSessionManager());
     }
-    
+
     // 处理待发送的消息
     if (pendingMessage) {
       try {
@@ -55,7 +65,7 @@ export default function ChatPage() {
         console.error('Failed to parse pending message:', error);
       }
     }
-    
+
     setIsLoading(false);
   }, [user, router]);
 
@@ -76,7 +86,6 @@ export default function ChatPage() {
 
   return (
     <div className="h-screen bg-gray-50 flex flex-col">
-
       {/* 主要聊天区域 - 占据剩余空间 */}
       <div className="flex-1 flex flex-col min-h-0">
         <FullScreenAIChat chatSession={chatSession} />
@@ -90,9 +99,7 @@ export default function ChatPage() {
             <span>•</span>
             <span>基于大语言模型</span>
           </div>
-          <div>
-            投资有风险，决策需谨慎
-          </div>
+          <div>投资有风险，决策需谨慎</div>
         </div>
       </div>
     </div>
@@ -124,10 +131,10 @@ const FullScreenAIChat: React.FC<FullScreenAIChatProps> = ({ chatSession }) => {
         content: autoSendMessage,
       };
       setMessages([userMessage]);
-      
+
       // 清理 sessionStorage
       sessionStorage.removeItem('autoSendMessage');
-      
+
       // 自动发送消息
       setTimeout(() => {
         handleAutoSendMessage(autoSendMessage);
@@ -146,7 +153,7 @@ const FullScreenAIChat: React.FC<FullScreenAIChatProps> = ({ chatSession }) => {
     try {
       const userId = user?.id?.toString() || '213';
       let accumulatedContent = '';
-      
+
       await chatSession.sendStreamMessage(
         message,
         (data: StreamData) => {
@@ -155,31 +162,40 @@ const FullScreenAIChat: React.FC<FullScreenAIChatProps> = ({ chatSession }) => {
             setStreamingContent(accumulatedContent);
           } else if (data.type === 'chat_completed') {
             const finalContent = accumulatedContent || data.content || '';
-            setMessages(prev => [...prev, {
-              role: 'assistant',
-              content: finalContent,
-            }]);
+            setMessages((prev) => [
+              ...prev,
+              {
+                role: 'assistant',
+                content: finalContent,
+              },
+            ]);
             setStreamingContent('');
             setIsStreaming(false);
           } else if (data.type === 'error') {
             console.error('Stream error:', data.error);
-            setMessages(prev => [...prev, {
-              role: 'assistant',
-              content: '抱歉，发生了错误，请稍后重试。',
-            }]);
+            setMessages((prev) => [
+              ...prev,
+              {
+                role: 'assistant',
+                content: '抱歉，发生了错误，请稍后重试。',
+              },
+            ]);
             setStreamingContent('');
             setIsStreaming(false);
           } else if (data.type === 'end') {
             if (accumulatedContent && !isStreaming) {
-              setMessages(prev => {
+              setMessages((prev) => {
                 const lastMessage = prev[prev.length - 1];
                 if (lastMessage && lastMessage.role === 'assistant') {
                   return prev;
                 }
-                return [...prev, {
-                  role: 'assistant',
-                  content: accumulatedContent,
-                }];
+                return [
+                  ...prev,
+                  {
+                    role: 'assistant',
+                    content: accumulatedContent,
+                  },
+                ];
               });
             }
             setStreamingContent('');
@@ -190,10 +206,13 @@ const FullScreenAIChat: React.FC<FullScreenAIChatProps> = ({ chatSession }) => {
       );
     } catch (error) {
       console.error('Auto send message error:', error);
-      setMessages(prev => [...prev, {
-        role: 'assistant',
-        content: '网络连接出现问题，请检查网络后重试。',
-      }]);
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: 'assistant',
+          content: '网络连接出现问题，请检查网络后重试。',
+        },
+      ]);
       setStreamingContent('');
       setIsStreaming(false);
     } finally {
@@ -225,12 +244,12 @@ const FullScreenAIChat: React.FC<FullScreenAIChatProps> = ({ chatSession }) => {
       role: 'user',
       content: userMessage,
     };
-    setMessages(prev => [...prev, newUserMessage]);
+    setMessages((prev) => [...prev, newUserMessage]);
 
     try {
       const userId = user?.id?.toString() || '213';
       let accumulatedContent = '';
-      
+
       await chatSession.sendStreamMessage(
         userMessage,
         (data: StreamData) => {
@@ -239,31 +258,40 @@ const FullScreenAIChat: React.FC<FullScreenAIChatProps> = ({ chatSession }) => {
             setStreamingContent(accumulatedContent);
           } else if (data.type === 'chat_completed') {
             const finalContent = accumulatedContent || data.content || '';
-            setMessages(prev => [...prev, {
-              role: 'assistant',
-              content: finalContent,
-            }]);
+            setMessages((prev) => [
+              ...prev,
+              {
+                role: 'assistant',
+                content: finalContent,
+              },
+            ]);
             setStreamingContent('');
             setIsStreaming(false);
           } else if (data.type === 'error') {
             console.error('Stream error:', data.error);
-            setMessages(prev => [...prev, {
-              role: 'assistant',
-              content: '抱歉，发生了错误，请稍后重试。',
-            }]);
+            setMessages((prev) => [
+              ...prev,
+              {
+                role: 'assistant',
+                content: '抱歉，发生了错误，请稍后重试。',
+              },
+            ]);
             setStreamingContent('');
             setIsStreaming(false);
           } else if (data.type === 'end') {
             if (accumulatedContent && !isStreaming) {
-              setMessages(prev => {
+              setMessages((prev) => {
                 const lastMessage = prev[prev.length - 1];
                 if (lastMessage && lastMessage.role === 'assistant') {
                   return prev;
                 }
-                return [...prev, {
-                  role: 'assistant',
-                  content: accumulatedContent,
-                }];
+                return [
+                  ...prev,
+                  {
+                    role: 'assistant',
+                    content: accumulatedContent,
+                  },
+                ];
               });
             }
             setStreamingContent('');
@@ -274,10 +302,13 @@ const FullScreenAIChat: React.FC<FullScreenAIChatProps> = ({ chatSession }) => {
       );
     } catch (error) {
       console.error('Send message error:', error);
-      setMessages(prev => [...prev, {
-        role: 'assistant',
-        content: '网络连接出现问题，请检查网络后重试。',
-      }]);
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: 'assistant',
+          content: '网络连接出现问题，请检查网络后重试。',
+        },
+      ]);
       setStreamingContent('');
       setIsStreaming(false);
     } finally {
@@ -310,18 +341,24 @@ const FullScreenAIChat: React.FC<FullScreenAIChatProps> = ({ chatSession }) => {
               <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6">
                 <MessageSquare className="w-8 h-8 text-white" />
               </div>
-              <h3 className="text-xl font-semibold mb-2">你好！我是 AI 智能助手</h3>
-              <p className="text-gray-400 mb-6">专业的RWA投资顾问，为您提供个性化建议</p>
+              <h3 className="text-xl font-semibold mb-2">
+                你好！我是 AI 智能助手
+              </h3>
+              <p className="text-gray-400 mb-6">
+                专业的RWA投资顾问，为您提供个性化建议
+              </p>
               <div className="flex flex-wrap justify-center gap-2 max-w-md mx-auto">
-                {['RWA是什么？', '如何投资RWA？', '风险评估', '市场趋势'].map((suggestion) => (
-                  <button
-                    key={suggestion}
-                    onClick={() => setInputValue(suggestion)}
-                    className="px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-full transition-colors"
-                  >
-                    {suggestion}
-                  </button>
-                ))}
+                {['RWA是什么？', '如何投资RWA？', '风险评估', '市场趋势'].map(
+                  (suggestion) => (
+                    <button
+                      key={suggestion}
+                      onClick={() => setInputValue(suggestion)}
+                      className="px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-full transition-colors"
+                    >
+                      {suggestion}
+                    </button>
+                  )
+                )}
               </div>
             </div>
           )}
@@ -356,7 +393,9 @@ const FullScreenAIChat: React.FC<FullScreenAIChatProps> = ({ chatSession }) => {
                       : 'bg-gray-100 text-gray-800 rounded-bl-md'
                   }`}
                 >
-                  <p className="whitespace-pre-wrap leading-relaxed">{message.content}</p>
+                  <p className="whitespace-pre-wrap leading-relaxed">
+                    {message.content}
+                  </p>
                 </div>
               </div>
             </div>
@@ -370,10 +409,14 @@ const FullScreenAIChat: React.FC<FullScreenAIChatProps> = ({ chatSession }) => {
                   <MessageSquare className="w-5 h-5" />
                 </div>
                 <div className="px-4 py-3 rounded-2xl rounded-bl-md bg-gray-100 text-gray-800">
-                  <p className="whitespace-pre-wrap leading-relaxed">{streamingContent}</p>
+                  <p className="whitespace-pre-wrap leading-relaxed">
+                    {streamingContent}
+                  </p>
                   <div className="flex items-center mt-2">
                     <Loader2 className="w-3 h-3 animate-spin text-gray-400" />
-                    <span className="text-xs text-gray-400 ml-1">正在输入...</span>
+                    <span className="text-xs text-gray-400 ml-1">
+                      正在输入...
+                    </span>
                   </div>
                 </div>
               </div>
@@ -410,7 +453,6 @@ const FullScreenAIChat: React.FC<FullScreenAIChatProps> = ({ chatSession }) => {
               )}
             </button>
           </div>
-         
         </div>
       </div>
     </div>

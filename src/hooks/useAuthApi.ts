@@ -19,15 +19,18 @@ export function useLogin() {
 
       // 转换为真实API需要的格式
       const loginData = {
-        loginType: "USERNAME",
+        loginType: 'USERNAME',
         identifier: credentials.username,
-        password: credentials.password
+        password: credentials.password,
       };
 
       const response = await apiClient.login(loginData);
 
       if (response.code === 0 || response.code === 200) {
-        console.log('Login successful, calling AuthContext.login with:', response.data);
+        console.log(
+          'Login successful, calling AuthContext.login with:',
+          response.data
+        );
         login(response.data);
         return { success: true, data: response.data };
       } else {
@@ -78,7 +81,7 @@ export function useRegister() {
         email: userData.email,
         password: userData.password,
         confirmPassword: userData.confirmPassword || userData.password,
-        verificationCode: userData.verificationCode || ""
+        verificationCode: userData.verificationCode || '',
       };
 
       const response = await apiClient.register(registerData);

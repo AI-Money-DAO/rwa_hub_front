@@ -10,11 +10,11 @@ interface LoginPromptModalProps {
   message?: string;
 }
 
-export default function LoginPromptModal({ 
-  isOpen, 
-  onClose, 
+export default function LoginPromptModal({
+  isOpen,
+  onClose,
   redirectPath = '/chat',
-  message 
+  message,
 }: LoginPromptModalProps) {
   const router = useRouter();
 
@@ -66,7 +66,7 @@ export default function LoginPromptModal({
             <Lock className="w-4 h-4" />
             登录账户
           </Button>
-          
+
           <Button
             onClick={handleRegister}
             variant="outline"

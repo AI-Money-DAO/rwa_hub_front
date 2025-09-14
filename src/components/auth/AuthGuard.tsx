@@ -43,7 +43,7 @@ export function AuthGuard({
   requireRole,
   redirectTo = '/auth/login',
   fallback,
-}: AuthGuardProps) {
+}: AuthGuardProps): React.ReactElement | null {
   const { user, isAuthenticated, isLoading } = useAuth();
   const router = useRouter();
 
@@ -77,22 +77,26 @@ export function AuthGuard({
 
   // Show loading spinner during authentication check
   if (isLoading) {
-    return fallback || <LoadingSpinner />;
+    return (fallback as React.ReactElement) || <LoadingSpinner />;
   }
 
   // If authentication is required but user is not authenticated
   if (requireAuth && !isAuthenticated) {
-    return fallback || <LoadingSpinner />;
+    return (fallback as React.ReactElement) || <LoadingSpinner />;
   }
 
   // If specific role is required but user doesn't have it
   if (requireRole && user && user.role !== requireRole) {
     const message = `This page requires ${requireRole} access. Your current role is ${user.role}.`;
-    return fallback || <UnauthorizedMessage message={message} />;
+    return (
+      (fallback as React.ReactElement) || (
+        <UnauthorizedMessage message={message} />
+      )
+    );
   }
 
   // If user is authenticated and has required role (if any), render children
-  return <>{children}</>;
+  return children as React.ReactElement;
 }
 
 // Higher-order component for protecting pages

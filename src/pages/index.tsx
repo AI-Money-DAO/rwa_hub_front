@@ -15,7 +15,7 @@ import { useAuth } from '@/contexts/AuthContext';
 
 export default function Home() {
   const { user } = useAuth();
-  
+
   return (
     <>
       <Head>
@@ -183,15 +183,17 @@ export default function Home() {
                 </p>
 
                 <div className="flex items-center justify-center gap-4 mb-8">
-                  {['专业分析', '安全保障', '7x24服务'].map((feature, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center gap-2 text-blue-100"
-                    >
-                      <CheckCircle className="w-5 h-5" />
-                      <span>{feature}</span>
-                    </div>
-                  ))}
+                  {['专业分析', '安全保障', '7x24服务'].map(
+                    (feature, index) => (
+                      <div
+                        key={index}
+                        className="flex items-center gap-2 text-blue-100"
+                      >
+                        <CheckCircle className="w-5 h-5" />
+                        <span>{feature}</span>
+                      </div>
+                    )
+                  )}
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">

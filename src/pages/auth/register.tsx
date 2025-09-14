@@ -52,19 +52,22 @@ export default function RegisterPage() {
     }
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || 'http://127.0.0.1'}/api/auth/send-email-code?email=${email}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL || 'http://127.0.0.1'}/api/auth/send-email-code?email=${email}`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
       const result = await response.json();
-      
+
       if (result.code === 0) {
         setCodeSent(true);
         setCountdown(60);
-        
+
         // 开始倒计时
         const timer = setInterval(() => {
           setCountdown((prev) => {

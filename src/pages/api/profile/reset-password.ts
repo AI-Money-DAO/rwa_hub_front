@@ -65,7 +65,11 @@ export default function handler(
 
     // Verify code
     const storedCode = verificationCodes.get(email);
-    if (!storedCode || storedCode.code !== verificationCode || storedCode.expires < Date.now()) {
+    if (
+      !storedCode ||
+      storedCode.code !== verificationCode ||
+      storedCode.expires < Date.now()
+    ) {
       return res.status(400).json({
         code: 400,
         message: 'Invalid or expired verification code',

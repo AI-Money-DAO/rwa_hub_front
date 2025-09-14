@@ -5,10 +5,24 @@ import Head from 'next/head';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { Layout } from '@/components/layout';
 import AIChatWidget from '@/components/features/AIChatWidget';
-import { ClickToComponent } from 'click-to-react-component';
+import { useEffect, useState } from 'react';
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
+  const [ClickToComponent, setClickToComponent] = useState<any>(null);
+
+  // 动态导入开发工具
+  useEffect(() => {
+    if (process.env.NODE_ENV === 'development') {
+      import('click-to-react-component')
+        .then((module) => {
+          setClickToComponent(() => module.ClickToComponent);
+        })
+        .catch(() => {
+          // 忽略导入错误，开发工具不是必需的
+        });
+    }
+  }, []);
 
   // Determine layout strategy based on route
   const isAuthPage = router.pathname.startsWith('/auth');
@@ -35,8 +49,8 @@ export default function App({ Component, pageProps }: AppProps) {
         {/* AI聊天小部件 - 全局可用 */}
         {!isAuthPage && <AIChatWidget />}
         {/* Click to Component 开发工具 - 仅在开发环境启用 */}
-        {process.env.NODE_ENV === 'development' && (
-          <ClickToComponent 
+        {process.env.NODE_ENV === 'development' && ClickToComponent && (
+          <ClickToComponent
             editor="windsurf"
             pathModifier={(path: string) => path.replace(/\\/g, '/')}
           />

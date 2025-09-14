@@ -181,11 +181,14 @@ class MockApiClient extends BaseApiClient {
   }
 
   // Auth endpoints
-  async login(data: { loginType: string; identifier: string; password: string; verificationCode?: string; authCode?: string }) {
-    return this.post<import('@/types').LoginResponse>(
-      '/api/auth/login',
-      data
-    );
+  async login(data: {
+    loginType: string;
+    identifier: string;
+    password: string;
+    verificationCode?: string;
+    authCode?: string;
+  }) {
+    return this.post<import('@/types').LoginResponse>('/api/auth/login', data);
   }
 
   async register(userData: {
@@ -311,7 +314,7 @@ class RealApiClient extends BaseApiClient {
     return this.get('/api/profile/password-strength', {}, false);
   }
 
-  // User Authentication  
+  // User Authentication
   sendSmsCode(phone: string) {
     return this.post(`/api/auth/send-sms-code?phone=${phone}`, {}, false);
   }
@@ -324,8 +327,18 @@ class RealApiClient extends BaseApiClient {
     return this.post('/api/auth/register', data, false);
   }
 
-  login(data: { loginType: string; identifier: string; password: string; verificationCode?: string; authCode?: string }) {
-    return this.post<import('@/types').LoginResponse>('/api/auth/login', data, false);
+  login(data: {
+    loginType: string;
+    identifier: string;
+    password: string;
+    verificationCode?: string;
+    authCode?: string;
+  }) {
+    return this.post<import('@/types').LoginResponse>(
+      '/api/auth/login',
+      data,
+      false
+    );
   }
 
   githubCallback(code: string) {
@@ -363,7 +376,11 @@ class RealApiClient extends BaseApiClient {
   }
 
   reviewSubmission(submissionId: number, status: string) {
-    return this.post(`/api/tasks/review/${submissionId}?status=${status}`, {}, true);
+    return this.post(
+      `/api/tasks/review/${submissionId}?status=${status}`,
+      {},
+      true
+    );
   }
 
   getPendingSubmissions(params?: PaginationParams) {
@@ -382,7 +399,7 @@ class RealApiClient extends BaseApiClient {
 // Export the appropriate client based on environment
 console.log('API Configuration:', {
   enableMockApi: config.enableMockApi,
-  apiBaseUrl: config.apiBaseUrl
+  apiBaseUrl: config.apiBaseUrl,
 });
 
 export const apiClient = config.enableMockApi

@@ -38,13 +38,16 @@ export function AISearchBox({
     }
 
     setMessage(''); // 清空输入框
-    
+
     // 立即跳转到聊天页面，并传递用户消息
-    sessionStorage.setItem('pendingMessage', JSON.stringify({
-      message: userMessage,
-      timestamp: Date.now()
-    }));
-    
+    sessionStorage.setItem(
+      'pendingMessage',
+      JSON.stringify({
+        message: userMessage,
+        timestamp: Date.now(),
+      })
+    );
+
     router.push('/chat');
   };
 

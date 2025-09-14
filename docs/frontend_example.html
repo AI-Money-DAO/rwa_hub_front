@@ -1,482 +1,482 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Coze API 前端示例 - 完整版</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f5f5f5;
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f5f5f5;
+      }
+      .container {
+        background: white;
+        border-radius: 10px;
+        padding: 30px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        color: #333;
+        text-align: center;
+        margin-bottom: 30px;
+      }
+      .section {
+        margin-bottom: 30px;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background-color: #fafafa;
+      }
+      .section h2 {
+        color: #2c3e50;
+        margin-top: 0;
+      }
+      .form-group {
+        margin-bottom: 15px;
+      }
+      label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+        color: #555;
+      }
+      input,
+      textarea,
+      select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 14px;
+        box-sizing: border-box;
+      }
+      textarea {
+        height: 100px;
+        resize: vertical;
+      }
+      button {
+        background-color: #3498db;
+        color: white;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-right: 10px;
+        margin-bottom: 10px;
+      }
+      button:hover {
+        background-color: #2980b9;
+      }
+      button:disabled {
+        background-color: #bdc3c7;
+        cursor: not-allowed;
+      }
+      .response {
+        background-color: #ecf0f1;
+        border: 1px solid #bdc3c7;
+        border-radius: 4px;
+        padding: 15px;
+        margin-top: 15px;
+        white-space: pre-wrap;
+        font-family: 'Courier New', monospace;
+        max-height: 400px;
+        overflow-y: auto;
+      }
+      .stream-response {
+        background-color: #e8f5e8;
+        border: 1px solid #27ae60;
+      }
+      .error {
+        background-color: #fadbd8;
+        border: 1px solid #e74c3c;
+        color: #c0392b;
+      }
+      .success {
+        background-color: #d5f4e6;
+        border: 1px solid #27ae60;
+        color: #27ae60;
+      }
+      .code-block {
+        background-color: #2c3e50;
+        color: #ecf0f1;
+        padding: 15px;
+        border-radius: 4px;
+        overflow-x: auto;
+        margin: 10px 0;
+      }
+      .loading {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid #f3f3f3;
+        border-top: 3px solid #3498db;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-left: 10px;
+      }
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
         }
-        .container {
-            background: white;
-            border-radius: 10px;
-            padding: 30px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        100% {
+          transform: rotate(360deg);
         }
-        h1 {
-            color: #333;
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .section {
-            margin-bottom: 30px;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            background-color: #fafafa;
-        }
-        .section h2 {
-            color: #2c3e50;
-            margin-top: 0;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: #555;
-        }
-        input, textarea, select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
-            box-sizing: border-box;
-        }
-        textarea {
-            height: 100px;
-            resize: vertical;
-        }
-        button {
-            background-color: #3498db;
-            color: white;
-            padding: 12px 24px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            margin-right: 10px;
-            margin-bottom: 10px;
-        }
-        button:hover {
-            background-color: #2980b9;
-        }
-        button:disabled {
-            background-color: #bdc3c7;
-            cursor: not-allowed;
-        }
-        .response {
-            background-color: #ecf0f1;
-            border: 1px solid #bdc3c7;
-            border-radius: 4px;
-            padding: 15px;
-            margin-top: 15px;
-            white-space: pre-wrap;
-            font-family: 'Courier New', monospace;
-            max-height: 400px;
-            overflow-y: auto;
-        }
-        .stream-response {
-            background-color: #e8f5e8;
-            border: 1px solid #27ae60;
-        }
-        .error {
-            background-color: #fadbd8;
-            border: 1px solid #e74c3c;
-            color: #c0392b;
-        }
-        .success {
-            background-color: #d5f4e6;
-            border: 1px solid #27ae60;
-            color: #27ae60;
-        }
-        .code-block {
-            background-color: #2c3e50;
-            color: #ecf0f1;
-            padding: 15px;
-            border-radius: 4px;
-            overflow-x: auto;
-            margin: 10px 0;
-        }
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #3498db;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-left: 10px;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <h1>🚀 Coze SDK HTTP API 前端调用示例</h1>
-        
-        <!-- 配置区域 -->
-        <div class="section">
-            <h2>📋 API 配置</h2>
-            <div class="form-group">
-                <label for="apiUrl">API 基础地址:</label>
-                <input type="text" id="apiUrl" value="http://127.0.0.1:2026/api/v1" placeholder="http://127.0.0.1:2026/api/v1">
-            </div>
+      <h1>🚀 Coze SDK HTTP API 前端调用示例</h1>
 
-            <div class="form-group">
-                <label for="userId">User ID:</label>
-                <input type="text" id="userId" value="213" placeholder="请输入用户ID">
-            </div>
+      <!-- 配置区域 -->
+      <div class="section">
+        <h2>📋 API 配置</h2>
+        <div class="form-group">
+          <label for="apiUrl">API 基础地址:</label>
+          <input
+            type="text"
+            id="apiUrl"
+            value="http://127.0.0.1:2026/api/v1"
+            placeholder="http://127.0.0.1:2026/api/v1"
+          />
         </div>
 
-        <!-- 聊天测试区域 -->
-        <div class="section">
-            <h2>💬 聊天测试</h2>
-            <div class="form-group">
-                <label for="message">消息内容:</label>
-                <textarea id="message" placeholder="请输入您要发送的消息...">你好，请介绍一下自己</textarea>
-            </div>
-            <div class="form-group">
-                <label for="conversationId">对话ID (可选):</label>
-                <input type="text" id="conversationId" placeholder="留空将创建新对话">
-            </div>
-            
-            <button onclick="sendNormalChat()">📤 发送普通聊天</button>
-            <button onclick="sendStreamChat()">🌊 发送流式聊天</button>
-            <button onclick="clearResponse()">🗑️ 清空响应</button>
-            
-            <div id="chatResponse" class="response">等待发送消息...</div>
+        <div class="form-group">
+          <label for="userId">User ID:</label>
+          <input
+            type="text"
+            id="userId"
+            value="213"
+            placeholder="请输入用户ID"
+          />
+        </div>
+      </div>
+
+      <!-- 聊天测试区域 -->
+      <div class="section">
+        <h2>💬 聊天测试</h2>
+        <div class="form-group">
+          <label for="message">消息内容:</label>
+          <textarea id="message" placeholder="请输入您要发送的消息...">
+你好，请介绍一下自己</textarea
+          >
+        </div>
+        <div class="form-group">
+          <label for="conversationId">对话ID (可选):</label>
+          <input
+            type="text"
+            id="conversationId"
+            placeholder="留空将创建新对话"
+          />
         </div>
 
-        <!-- 其他API测试 -->
-        <div class="section">
-            <h2>🔧 其他API测试</h2>
-            <button onclick="testConnection()">🔗 测试连接</button>
-            <button onclick="getUserInfo()">👤 获取用户信息</button>
-            <button onclick="getWorkspaces()">🏢 获取工作空间</button>
-            <button onclick="getConfig()">⚙️ 获取配置</button>
-            
-            <div id="apiResponse" class="response">等待API调用...</div>
+        <button onclick="sendNormalChat()">📤 发送普通聊天</button>
+        <button onclick="sendStreamChat()">🌊 发送流式聊天</button>
+        <button onclick="clearResponse()">🗑️ 清空响应</button>
+
+        <div id="chatResponse" class="response">等待发送消息...</div>
+      </div>
+
+      <!-- 其他API测试 -->
+      <div class="section">
+        <h2>🔧 其他API测试</h2>
+        <button onclick="testConnection()">🔗 测试连接</button>
+        <button onclick="getUserInfo()">👤 获取用户信息</button>
+        <button onclick="getWorkspaces()">🏢 获取工作空间</button>
+        <button onclick="getConfig()">⚙️ 获取配置</button>
+
+        <div id="apiResponse" class="response">等待API调用...</div>
+      </div>
+
+      <!-- 代码示例 -->
+      <div class="section">
+        <h2>📝 JavaScript 调用示例</h2>
+        <h3>1. 普通聊天请求</h3>
+        <div class="code-block">
+          fetch('http://127.0.0.1:8000/api/v1/chat', { method: 'POST', headers:
+          { 'Content-Type': 'application/json' }, body: JSON.stringify({
+          user_id: '213', messages: [{ role: 'user', content:
+          '你好，请介绍一下自己', content_type: 'text' }], stream: false }) })
+          .then(response => response.json()) .then(data => console.log(data));
         </div>
 
-        <!-- 代码示例 -->
-        <div class="section">
-            <h2>📝 JavaScript 调用示例</h2>
-            <h3>1. 普通聊天请求</h3>
-            <div class="code-block">
-fetch('http://127.0.0.1:8000/api/v1/chat', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-        user_id: '213',
-        messages: [{
-            role: 'user',
-            content: '你好，请介绍一下自己',
-            content_type: 'text'
-        }],
-        stream: false
-    })
-})
-.then(response => response.json())
-.then(data => console.log(data));
-            </div>
-
-            <h3>2. 流式聊天请求</h3>
-            <div class="code-block">
-fetch('http://127.0.0.1:8000/api/v1/chat', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-        user_id: '213',
-        messages: [{
-            role: 'user',
-            content: '你好，请介绍一下自己',
-            content_type: 'text'
-        }],
-        stream: true
-    })
-})
-.then(response => {
-    const reader = response.body.getReader();
-    const decoder = new TextDecoder();
-    let buffer = '';
-    
-    function readStream() {
-        return reader.read().then(({ done, value }) => {
-            if (done) return;
-            
-            buffer += decoder.decode(value, { stream: true });
-            const lines = buffer.split('\n');
-            buffer = lines.pop(); // 保留不完整的行
-
-            for (const line of lines) {
-                if (line.startsWith('data: ')) {
-                    const data = line.slice(6);
-                    if (data.trim() === '') continue;
-                    
-                    try {
-                        const parsed = JSON.parse(data);
-                        if (parsed.type === 'message_delta') {
-                            console.log('收到消息片段:', parsed.content);
-                        } else if (parsed.type === 'chat_completed') {
-                            console.log('对话完成:', parsed.conversation_id);
-                        }
-                    } catch (e) {
-                        console.error('解析错误:', e);
-                    }
-                }
-            }
-            
-            return readStream();
-        });
-    }
-    
-    return readStream();
-});
-            </div>
+        <h3>2. 流式聊天请求</h3>
+        <div class="code-block">
+          fetch('http://127.0.0.1:8000/api/v1/chat', { method: 'POST', headers:
+          { 'Content-Type': 'application/json' }, body: JSON.stringify({
+          user_id: '213', messages: [{ role: 'user', content:
+          '你好，请介绍一下自己', content_type: 'text' }], stream: true }) })
+          .then(response => { const reader = response.body.getReader(); const
+          decoder = new TextDecoder(); let buffer = ''; function readStream() {
+          return reader.read().then(({ done, value }) => { if (done) return;
+          buffer += decoder.decode(value, { stream: true }); const lines =
+          buffer.split('\n'); buffer = lines.pop(); // 保留不完整的行 for (const
+          line of lines) { if (line.startsWith('data: ')) { const data =
+          line.slice(6); if (data.trim() === '') continue; try { const parsed =
+          JSON.parse(data); if (parsed.type === 'message_delta') {
+          console.log('收到消息片段:', parsed.content); } else if (parsed.type
+          === 'chat_completed') { console.log('对话完成:',
+          parsed.conversation_id); } } catch (e) { console.error('解析错误:',
+          e); } } } return readStream(); }); } return readStream(); });
         </div>
+      </div>
     </div>
 
     <script>
-        // 获取API配置
-        function getApiConfig() {
-            return {
-                apiUrl: document.getElementById('apiUrl').value,
-                userId: document.getElementById('userId').value
-            };
+      // 获取API配置
+      function getApiConfig() {
+        return {
+          apiUrl: document.getElementById('apiUrl').value,
+          userId: document.getElementById('userId').value,
+        };
+      }
+
+      // 显示加载状态
+      function showLoading(elementId) {
+        const element = document.getElementById(elementId);
+        element.innerHTML = '正在处理请求... <div class="loading"></div>';
+        element.className = 'response';
+      }
+
+      // 显示响应
+      function showResponse(
+        elementId,
+        data,
+        isSuccess = true,
+        isStream = false
+      ) {
+        const element = document.getElementById(elementId);
+        element.innerHTML =
+          typeof data === 'string' ? data : JSON.stringify(data, null, 2);
+        element.className = `response ${isSuccess ? (isStream ? 'stream-response' : 'success') : 'error'}`;
+      }
+
+      // 追加流式响应
+      function appendStreamResponse(elementId, data) {
+        const element = document.getElementById(elementId);
+        element.innerHTML += data;
+        element.scrollTop = element.scrollHeight;
+      }
+
+      // 发送普通聊天
+      async function sendNormalChat() {
+        const config = getApiConfig();
+        const message = document.getElementById('message').value;
+        const conversationId = document.getElementById('conversationId').value;
+
+        if (!message.trim()) {
+          alert('请输入消息内容');
+          return;
         }
 
-        // 显示加载状态
-        function showLoading(elementId) {
-            const element = document.getElementById(elementId);
-            element.innerHTML = '正在处理请求... <div class="loading"></div>';
-            element.className = 'response';
+        showLoading('chatResponse');
+
+        try {
+          const response = await fetch(`${config.apiUrl}/chat`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              user_id: config.userId,
+              messages: [
+                {
+                  role: 'user',
+                  content: message,
+                  content_type: 'text',
+                },
+              ],
+              conversation_id: conversationId || null,
+              stream: false,
+            }),
+          });
+
+          const data = await response.json();
+          showResponse('chatResponse', data, response.ok);
+
+          // 如果成功且有conversation_id，更新输入框
+          if (data.success && data.conversation_id) {
+            document.getElementById('conversationId').value =
+              data.conversation_id;
+          }
+        } catch (error) {
+          showResponse('chatResponse', `请求失败: ${error.message}`, false);
+        }
+      }
+
+      // 发送流式聊天
+      async function sendStreamChat() {
+        const config = getApiConfig();
+        const message = document.getElementById('message').value;
+        const conversationId = document.getElementById('conversationId').value;
+
+        if (!message.trim()) {
+          alert('请输入消息内容');
+          return;
         }
 
-        // 显示响应
-        function showResponse(elementId, data, isSuccess = true, isStream = false) {
-            const element = document.getElementById(elementId);
-            element.innerHTML = typeof data === 'string' ? data : JSON.stringify(data, null, 2);
-            element.className = `response ${isSuccess ? (isStream ? 'stream-response' : 'success') : 'error'}`;
-        }
+        showResponse('chatResponse', '开始接收流式响应...\n', true, true);
+        let fullContent = '';
 
-        // 追加流式响应
-        function appendStreamResponse(elementId, data) {
-            const element = document.getElementById(elementId);
-            element.innerHTML += data;
-            element.scrollTop = element.scrollHeight;
-        }
+        try {
+          const response = await fetch(`${config.apiUrl}/chat`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              user_id: config.userId,
+              messages: [
+                {
+                  role: 'user',
+                  content: message,
+                  content_type: 'text',
+                },
+              ],
+              conversation_id: conversationId || null,
+              stream: true,
+            }),
+          });
 
-        // 发送普通聊天
-        async function sendNormalChat() {
-            const config = getApiConfig();
-            const message = document.getElementById('message').value;
-            const conversationId = document.getElementById('conversationId').value;
-            
-            if (!message.trim()) {
-                alert('请输入消息内容');
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+          }
+
+          const reader = response.body.getReader();
+          const decoder = new TextDecoder();
+          let buffer = '';
+
+          function readStream() {
+            return reader.read().then(({ done, value }) => {
+              if (done) {
+                appendStreamResponse('chatResponse', '\n\n✅ 流式响应完成');
                 return;
-            }
+              }
 
-            showLoading('chatResponse');
+              buffer += decoder.decode(value, { stream: true });
+              const lines = buffer.split('\n');
+              buffer = lines.pop(); // 保留不完整的行
 
-            try {
-                const response = await fetch(`${config.apiUrl}/chat`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        user_id: config.userId,
-                        messages: [{
-                            role: 'user',
-                            content: message,
-                            content_type: 'text'
-                        }],
-                        conversation_id: conversationId || null,
-                        stream: false
-                    })
-                });
+              for (const line of lines) {
+                if (line.startsWith('data: ')) {
+                  const data = line.slice(6);
+                  if (data.trim() === '') continue;
 
-                const data = await response.json();
-                showResponse('chatResponse', data, response.ok);
-                
-                // 如果成功且有conversation_id，更新输入框
-                if (data.success && data.conversation_id) {
-                    document.getElementById('conversationId').value = data.conversation_id;
+                  try {
+                    const parsed = JSON.parse(data);
+                    console.log('Stream data:', parsed);
+
+                    if (parsed.type === 'message_delta') {
+                      // 处理流式消息片段
+                      fullContent += parsed.content;
+                      const element = document.getElementById('chatResponse');
+                      element.innerHTML = `开始接收流式响应...\n\n实时回复:\n${fullContent}`;
+                      element.scrollTop = element.scrollHeight;
+                    } else if (parsed.type === 'chat_completed') {
+                      appendStreamResponse(
+                        'chatResponse',
+                        `\n\n✅ 对话完成 - 会话ID: ${parsed.conversation_id || 'N/A'}`
+                      );
+                      // 更新会话ID
+                      if (parsed.conversation_id) {
+                        document.getElementById('conversationId').value =
+                          parsed.conversation_id;
+                      }
+                    } else if (parsed.type === 'error') {
+                      appendStreamResponse(
+                        'chatResponse',
+                        `\n\n❌ 错误: ${parsed.error}`
+                      );
+                    }
+                  } catch (e) {
+                    console.error('Parse error:', e, 'Data:', data);
+                  }
                 }
-            } catch (error) {
-                showResponse('chatResponse', `请求失败: ${error.message}`, false);
-            }
+              }
+
+              return readStream();
+            });
+          }
+
+          await readStream();
+        } catch (error) {
+          showResponse('chatResponse', `流式请求失败: ${error.message}`, false);
         }
+      }
 
-        // 发送流式聊天
-        async function sendStreamChat() {
-            const config = getApiConfig();
-            const message = document.getElementById('message').value;
-            const conversationId = document.getElementById('conversationId').value;
-            
-            if (!message.trim()) {
-                alert('请输入消息内容');
-                return;
-            }
+      // 测试连接
+      async function testConnection() {
+        const config = getApiConfig();
+        showLoading('apiResponse');
 
-            showResponse('chatResponse', '开始接收流式响应...\n', true, true);
-            let fullContent = '';
-
-            try {
-                const response = await fetch(`${config.apiUrl}/chat`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        user_id: config.userId,
-                        messages: [{
-                            role: 'user',
-                            content: message,
-                            content_type: 'text'
-                        }],
-                        conversation_id: conversationId || null,
-                        stream: true
-                    })
-                });
-
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                }
-
-                const reader = response.body.getReader();
-                const decoder = new TextDecoder();
-                let buffer = '';
-                
-                function readStream() {
-                    return reader.read().then(({ done, value }) => {
-                        if (done) {
-                            appendStreamResponse('chatResponse', '\n\n✅ 流式响应完成');
-                            return;
-                        }
-                        
-                        buffer += decoder.decode(value, { stream: true });
-                        const lines = buffer.split('\n');
-                        buffer = lines.pop(); // 保留不完整的行
-
-                        for (const line of lines) {
-                            if (line.startsWith('data: ')) {
-                                const data = line.slice(6);
-                                if (data.trim() === '') continue;
-                                
-                                try {
-                                    const parsed = JSON.parse(data);
-                                    console.log('Stream data:', parsed);
-                                    
-                                    if (parsed.type === 'message_delta') {
-                                        // 处理流式消息片段
-                                        fullContent += parsed.content;
-                                        const element = document.getElementById('chatResponse');
-                                        element.innerHTML = `开始接收流式响应...\n\n实时回复:\n${fullContent}`;
-                                        element.scrollTop = element.scrollHeight;
-                                    } else if (parsed.type === 'chat_completed') {
-                                        appendStreamResponse('chatResponse', `\n\n✅ 对话完成 - 会话ID: ${parsed.conversation_id || 'N/A'}`);
-                                        // 更新会话ID
-                                        if (parsed.conversation_id) {
-                                            document.getElementById('conversationId').value = parsed.conversation_id;
-                                        }
-                                    } else if (parsed.type === 'error') {
-                                        appendStreamResponse('chatResponse', `\n\n❌ 错误: ${parsed.error}`);
-                                    }
-                                } catch (e) {
-                                    console.error('Parse error:', e, 'Data:', data);
-                                }
-                            }
-                        }
-                        
-                        return readStream();
-                    });
-                }
-                
-                await readStream();
-            } catch (error) {
-                showResponse('chatResponse', `流式请求失败: ${error.message}`, false);
-            }
+        try {
+          const response = await fetch(`${config.apiUrl}/test/connection`);
+          const data = await response.json();
+          showResponse('apiResponse', data, response.ok);
+        } catch (error) {
+          showResponse('apiResponse', `连接测试失败: ${error.message}`, false);
         }
+      }
 
-        // 测试连接
-        async function testConnection() {
-            const config = getApiConfig();
-            showLoading('apiResponse');
+      // 获取用户信息
+      async function getUserInfo() {
+        const config = getApiConfig();
+        showLoading('apiResponse');
 
-            try {
-                const response = await fetch(`${config.apiUrl}/test/connection`);
-                const data = await response.json();
-                showResponse('apiResponse', data, response.ok);
-            } catch (error) {
-                showResponse('apiResponse', `连接测试失败: ${error.message}`, false);
-            }
+        try {
+          const response = await fetch(`${config.apiUrl}/user/info`);
+          const data = await response.json();
+          showResponse('apiResponse', data, response.ok);
+        } catch (error) {
+          showResponse(
+            'apiResponse',
+            `获取用户信息失败: ${error.message}`,
+            false
+          );
         }
+      }
 
-        // 获取用户信息
-        async function getUserInfo() {
-            const config = getApiConfig();
-            showLoading('apiResponse');
+      // 获取工作空间
+      async function getWorkspaces() {
+        const config = getApiConfig();
+        showLoading('apiResponse');
 
-            try {
-                const response = await fetch(`${config.apiUrl}/user/info`);
-                const data = await response.json();
-                showResponse('apiResponse', data, response.ok);
-            } catch (error) {
-                showResponse('apiResponse', `获取用户信息失败: ${error.message}`, false);
-            }
+        try {
+          const response = await fetch(`${config.apiUrl}/workspaces`);
+          const data = await response.json();
+          showResponse('apiResponse', data, response.ok);
+        } catch (error) {
+          showResponse(
+            'apiResponse',
+            `获取工作空间失败: ${error.message}`,
+            false
+          );
         }
+      }
 
-        // 获取工作空间
-        async function getWorkspaces() {
-            const config = getApiConfig();
-            showLoading('apiResponse');
+      // 获取配置
+      async function getConfig() {
+        const config = getApiConfig();
+        showLoading('apiResponse');
 
-            try {
-                const response = await fetch(`${config.apiUrl}/workspaces`);
-                const data = await response.json();
-                showResponse('apiResponse', data, response.ok);
-            } catch (error) {
-                showResponse('apiResponse', `获取工作空间失败: ${error.message}`, false);
-            }
+        try {
+          const response = await fetch(`${config.apiUrl}/config`);
+          const data = await response.json();
+          showResponse('apiResponse', data, response.ok);
+        } catch (error) {
+          showResponse('apiResponse', `获取配置失败: ${error.message}`, false);
         }
+      }
 
-        // 获取配置
-        async function getConfig() {
-            const config = getApiConfig();
-            showLoading('apiResponse');
-
-            try {
-                const response = await fetch(`${config.apiUrl}/config`);
-                const data = await response.json();
-                showResponse('apiResponse', data, response.ok);
-            } catch (error) {
-                showResponse('apiResponse', `获取配置失败: ${error.message}`, false);
-            }
-        }
-
-        // 清空响应
-        function clearResponse() {
-            document.getElementById('chatResponse').innerHTML = '等待发送消息...';
-            document.getElementById('chatResponse').className = 'response';
-        }
+      // 清空响应
+      function clearResponse() {
+        document.getElementById('chatResponse').innerHTML = '等待发送消息...';
+        document.getElementById('chatResponse').className = 'response';
+      }
     </script>
-</body>
+  </body>
 </html>
