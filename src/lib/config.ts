@@ -40,7 +40,7 @@ function getNumberEnvVar(name: string, defaultValue?: number): number {
 // Application configuration
 export const config: AppConfig = {
   appName: getEnvVar('NEXT_PUBLIC_APP_NAME', 'RWA Hub'),
-  apiBaseUrl: getEnvVar('NEXT_PUBLIC_API_BASE_URL', 'http://127.0.0.1'),
+  apiBaseUrl: getEnvVar('NEXT_PUBLIC_API_BASE_URL', 'http://www.ce182.com'),
   enableMockApi: getBooleanEnvVar('NEXT_PUBLIC_ENABLE_MOCK_API', false),
   jwtSecret: process.env.JWT_SECRET,
 };
