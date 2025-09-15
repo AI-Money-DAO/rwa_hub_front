@@ -1,7 +1,7 @@
 import { config } from './config';
 
 // Coze API 配置
-const COZE_API_BASE = 'http://127.0.0.1:2026/api/v1';
+const COZE_API_BASE = 'http://127.0.0.1/api/v1';
 
 // 消息类型定义
 export interface ChatMessage {
