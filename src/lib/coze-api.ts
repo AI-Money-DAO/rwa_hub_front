@@ -1,7 +1,7 @@
 import { config } from './config';
 
 // Coze API 配置
-const COZE_API_BASE = 'http://127.0.0.1/api/v1';
+const COZE_API_BASE = 'http://127.0.0.1:2026';
 
 // 消息类型定义
 export interface ChatMessage {
@@ -51,7 +51,7 @@ export class CozeAPIClient {
   // 发送普通聊天消息
   async chat(request: ChatRequest): Promise<ChatResponse> {
     try {
-      const response = await fetch(`${this.baseURL}/chat`, {
+      const response = await fetch(`${this.baseURL}/api/v1/chat`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -80,7 +80,7 @@ export class CozeAPIClient {
     onMessage: (data: StreamData) => void
   ): Promise<void> {
     try {
-      const response = await fetch(`${this.baseURL}/chat`, {
+      const response = await fetch(`${this.baseURL}/api/v1/chat`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -142,7 +142,7 @@ export class CozeAPIClient {
   // 测试连接
   async testConnection(): Promise<any> {
     try {
-      const response = await fetch(`${this.baseURL}/test/connection`);
+      const response = await fetch(`${this.baseURL}/api/v1/test/connection`);
       return await response.json();
     } catch (error) {
       console.error('Connection test error:', error);
@@ -153,7 +153,7 @@ export class CozeAPIClient {
   // 获取配置
   async getConfig(): Promise<any> {
     try {
-      const response = await fetch(`${this.baseURL}/config`);
+      const response = await fetch(`${this.baseURL}/api/v1/config`);
       return await response.json();
     } catch (error) {
       console.error('Get config error:', error);
